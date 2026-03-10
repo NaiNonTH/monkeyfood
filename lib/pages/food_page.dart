@@ -6,6 +6,7 @@ import 'package:monkeyfood/cubit/foods_cubit.dart';
 import 'package:monkeyfood/models/cart_item.dart';
 import 'package:monkeyfood/states/food_state.dart';
 import 'package:monkeyfood/states/foods_state.dart';
+import 'package:monkeyfood/widgets/favorite.dart';
 import 'package:monkeyfood/widgets/food_card_grid.dart';
 import 'package:monkeyfood/widgets/main_app_bar.dart';
 
@@ -60,7 +61,7 @@ class _FoodPageState extends State<FoodPage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              // FavoriteButton(food: foodState.food),
+                              FavoriteButton(food: foodState.food),
                             ],
                           ),
                           SizedBox(height: 4.0),
