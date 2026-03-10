@@ -1,11 +1,36 @@
 import 'package:monkeyfood/models/cart_item.dart';
 
-class CartState {
+abstract class CartState {}
+
+class CartInit extends CartState {}
+
+class CartLoading extends CartState {}
+
+class CartLoaded extends CartState {
   final List<CartItem> cartItems;
 
-  CartState({required this.cartItems});
+  CartLoaded({required this.cartItems});
+}
 
-  CartState copyWith({List<CartItem>? cartItems}) {
-    return CartState(cartItems: cartItems ?? this.cartItems);
-  }
+class CartItemAdded extends CartState {}
+
+class CartUpdatingAmount extends CartState {}
+
+class CartItemUpdated extends CartState {
+  final int id;
+  final int amount;
+
+  CartItemUpdated({required this.id, required this.amount});
+}
+
+class CartItemDeleted extends CartState {
+  final int id;
+
+  CartItemDeleted({required this.id});
+}
+
+class CartError extends CartState {
+  final String message;
+
+  CartError({required this.message});
 }

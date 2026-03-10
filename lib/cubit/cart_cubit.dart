@@ -6,25 +6,45 @@ import 'package:monkeyfood/repositories/cart_repositories.dart';
 class CartCubit extends Cubit<CartState> {
   final CartRepositories cartRepositories;
 
-  CartCubit(this.cartRepositories)
-    : super(CartState(cartItems: cartRepositories.getCartItems()));
+  CartCubit(this.cartRepositories) : super(CartInit());
 
-  void loadCartItems() {
-    emit(state.copyWith(cartItems: cartRepositories.getCartItems()));
+  Future<void> loadCartItems() async {
+    emit(CartLoading());
+
+    final cartItems = await cartRepositories.getCartItems();
+
+    emit(CartLoaded(cartItems: cartItems));
   }
 
-  void addCartItem(CartItem item) {
-    cartRepositories.addToCart(item);
-    emit(state.copyWith(cartItems: cartRepositories.getCartItems()));
+  Future<void> addCartItem(CartItem item) async {
+    emit(CartLoading());
+
+    await cartRepositories.addToCart(item);
+
+    emit(CartItemAdded());
   }
 
-  void updateCartItemAmount(int index, int amount) {
-    cartRepositories.updateCartItemAmount(index, amount);
-    emit(state.copyWith(cartItems: cartRepositories.getCartItems()));
+  Future<void> incrementItemAmount(int id) async {
+    emit(CartUpdatingAmount());
+
+    final newAmount = await cartRepositories.incrementItemAmount(id);
+
+    emit(CartItemUpdated(id: id, amount: newAmount));
   }
 
-  void removeCartItem(CartItem item) {
-    cartRepositories.removeFromCart(item);
-    emit(state.copyWith(cartItems: cartRepositories.getCartItems()));
+  Future<void> decrementItemAmount(int id) async {
+    emit(CartUpdatingAmount());
+
+    final newAmount = await cartRepositories.decrementItemAmount(id);
+
+    emit(CartItemUpdated(id: id, amount: newAmount));
+  }
+
+  Future<void> removeCartItem(int id) async {
+    emit(CartLoading());
+
+    await cartRepositories.removeFromCart(id);
+
+    emit(CartItemDeleted(id: id));
   }
 }
