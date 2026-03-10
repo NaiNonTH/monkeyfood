@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/models/food_entry.dart';
+import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/repositories/favorite_repositories.dart';
 import 'package:monkeyfood/states/favorite_state.dart';
 
@@ -15,13 +15,13 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     emit(state.copyWith(favoriteRepositories.getFavoriteItems()));
   }
 
-  void addFavoriteItem(FoodEntry foodEntry) {
-    favoriteRepositories.addToFavorite(foodEntry);
+  void addFavoriteItem(Food food) {
+    favoriteRepositories.addToFavorite(food);
     loadFavoriteItems();
   }
 
-  void removeFavoriteItem(FoodEntry foodEntry) {
-    favoriteRepositories.removeFromFavorite(foodEntry);
+  void removeFavoriteItem(Food food) {
+    favoriteRepositories.removeFromFavorite(food);
     loadFavoriteItems();
   }
 }

@@ -1,23 +1,23 @@
 import 'dart:core';
 
-import 'package:monkeyfood/models/food_entry.dart';
+import 'package:monkeyfood/models/food.dart';
 
 class FavoriteRepositories {
-  static final List<FoodEntry> _favoriteItems = [];
+  static final List<Food> _favoriteItems = [];
 
-  List<FoodEntry> getFavoriteItems() {
+  List<Food> getFavoriteItems() {
     return _favoriteItems;
   }
 
-  bool includes(FoodEntry foodEntry) {
-    return _favoriteItems.contains(foodEntry);
+  bool includes(Food Food) {
+    return _favoriteItems.contains(Food);
   }
 
-  void addToFavorite(FoodEntry foodEntry) {
-    _favoriteItems.add(foodEntry);
+  void addToFavorite(Food Food) {
+    _favoriteItems.add(Food);
   }
 
-  void removeFromFavorite(FoodEntry foodEntry) {
-    _favoriteItems.remove(foodEntry);
+  void removeFromFavorite(Food Food) {
+    _favoriteItems.remove(Food);
   }
 }

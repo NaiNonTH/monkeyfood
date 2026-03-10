@@ -1,11 +1,11 @@
-import 'package:monkeyfood/models/food_entry.dart';
+import 'package:monkeyfood/models/food.dart';
 
 class FavoriteState {
-  final List<FoodEntry> favoriteItems;
+  final List<Food> favoriteItems;
 
   FavoriteState({required this.favoriteItems});
 
-  FavoriteState copyWith(List<FoodEntry>? favoriteItems) {
+  FavoriteState copyWith(List<Food>? favoriteItems) {
     return FavoriteState(favoriteItems: favoriteItems ?? this.favoriteItems);
   }
 }

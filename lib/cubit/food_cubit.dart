@@ -2,13 +2,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/states/food_state.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
 
-class FoodEntryCubit extends Cubit<FoodEntryState> {
+class FoodCubit extends Cubit<FoodState> {
   final FoodRepositories foodRepositories;
 
-  FoodEntryCubit(this.foodRepositories)
-    : super(FoodEntryState(foodEntries: foodRepositories.getFoodEntries()));
+  FoodCubit(this.foodRepositories) : super(FoodInit());
 
-  void loadFoodEntries() {
-    emit(state.copyWith(foodEntries: foodRepositories.getFoodEntries()));
+  Future<void> loadFoodById(int id) async {
+    emit(FoodLoading());
+
+    final food = await foodRepositories.getFoodById(id);
+
+    emit(FoodLoaded(food: food));
   }
 }

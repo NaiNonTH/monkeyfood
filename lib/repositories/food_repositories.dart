@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:monkeyfood/models/food_entry.dart';
+import 'package:monkeyfood/models/food.dart';
 
 class FoodRepositories {
   static final _dummyFoodEntires = List.generate(
     10,
-    (index) => FoodEntry(
+    (index) => Food(
       id: index,
       title: 'Food Item $index',
       price: (index + 1) * 5,
@@ -15,11 +15,15 @@ class FoodRepositories {
     ),
   );
 
-  List<FoodEntry> getFoodEntries() {
+  Future<List<Food>> getFoodEntries() async {
+    await Future.delayed(Duration(seconds: 1));
+
     return _dummyFoodEntires;
   }
 
-  FoodEntry getFoodEntryById(int id) {
+  Future<Food> getFoodById(int id) async {
+    await Future.delayed(Duration(seconds: 1));
+
     return _dummyFoodEntires[id];
   }
 }

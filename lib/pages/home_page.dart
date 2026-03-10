@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/cubit/food_cubit.dart';
+import 'package:monkeyfood/cubit/foods_cubit.dart';
+import 'package:monkeyfood/states/foods_state.dart';
 import 'package:monkeyfood/widgets/carousel.dart';
 import 'package:monkeyfood/widgets/food_card_grid.dart';
 import 'package:monkeyfood/widgets/main_app_bar.dart';
@@ -16,20 +17,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      context.read<FoodEntryCubit>().loadFoodEntries();
-    }
+    context.read<FoodsCubit>().loadFoodEntries();
   }
 
   @override
@@ -46,7 +34,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 right: 4.0,
                 bottom: 8.0,
               ),
-              child: FoodCardGrid(),
+              child: BlocBuilder<FoodsCubit, FoodsState>(
+                builder: (context, foodState) {
+                  switch (foodState) {
+                    case FoodsLoaded():
+                      return FoodCardGrid(foods: foodState.foods);
+                    case FoodsError():
+                      return Center(
+                        child: Text(
+                          'Something went wrong: ${foodState.message}',
+                        ),
+                      );
+                    default:
+                      return Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
             ),
           ],
         ),

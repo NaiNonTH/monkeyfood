@@ -1,11 +1,19 @@
-import 'package:monkeyfood/models/food_entry.dart';
+import 'package:monkeyfood/models/food.dart';
 
-class FoodEntryState {
-  final List<FoodEntry> foodEntries;
+abstract class FoodState {}
 
-  FoodEntryState({required this.foodEntries});
+class FoodInit extends FoodState {}
 
-  FoodEntryState copyWith({List<FoodEntry>? foodEntries}) {
-    return FoodEntryState(foodEntries: foodEntries ?? this.foodEntries);
-  }
+class FoodLoading extends FoodState {}
+
+class FoodLoaded extends FoodState {
+  final Food food;
+
+  FoodLoaded({required this.food});
+}
+
+class FoodError extends FoodState {
+  final String message;
+
+  FoodError({required this.message});
 }

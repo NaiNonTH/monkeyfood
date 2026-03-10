@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:monkeyfood/models/food_entry.dart';
+import 'package:monkeyfood/models/food.dart';
 
 class CartItem {
-  final FoodEntry item;
+  final Food item;
   int amount;
   int totalPrice;
   int totalOriginalPrice;
@@ -26,7 +26,7 @@ class CartItem {
     return amount;
   }
 
-  CartItem copyWith({FoodEntry? item, int? amount}) {
+  CartItem copyWith({Food? item, int? amount}) {
     return CartItem(item ?? this.item, amount: amount ?? this.amount);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/cubit/cart_cubit.dart';
 import 'package:monkeyfood/cubit/favorite_cubit.dart';
 import 'package:monkeyfood/cubit/food_cubit.dart';
+import 'package:monkeyfood/cubit/foods_cubit.dart';
 import 'package:monkeyfood/pages/cart_page.dart';
 import 'package:monkeyfood/pages/favorite_page.dart';
 import 'package:monkeyfood/pages/food_page.dart';
@@ -24,7 +25,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => FoodEntryCubit(FoodRepositories())),
+        BlocProvider(create: (context) => FoodCubit(FoodRepositories())),
+        BlocProvider(create: (context) => FoodsCubit(FoodRepositories())),
         BlocProvider(create: (context) => CartCubit(CartRepositories())),
         BlocProvider(
           create: (context) => FavoriteCubit(FavoriteRepositories()),
