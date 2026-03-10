@@ -145,7 +145,7 @@ class _FoodPageState extends State<FoodPage> {
                           ),
                           SizedBox(height: 8.0),
                           Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                            foodState.food.description,
                             style: TextStyle(
                               fontSize: 16.0,
                               color: Colors.black87,

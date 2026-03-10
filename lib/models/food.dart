@@ -1,5 +1,6 @@
 class Food {
   final String title;
+  final String description;
   final String? imageUrl;
   final int id;
   final int originalPrice;
@@ -8,6 +9,7 @@ class Food {
 
   Food({
     required this.title,
+    required this.description,
     required this.price,
     required this.rating,
     required this.originalPrice,
@@ -17,6 +19,7 @@ class Food {
 
   Food copyWith({
     String? title,
+    String? description,
     String? imageUrl,
     int? id,
     int? originalPrice,
@@ -25,6 +28,7 @@ class Food {
   }) {
     return Food(
       title: title ?? this.title,
+      description: description ?? this.description,
       imageUrl: imageUrl ?? this.imageUrl,
       id: id ?? this.id,
       originalPrice: originalPrice ?? this.originalPrice,

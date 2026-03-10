@@ -7,6 +7,8 @@ class FoodRepositories {
     10,
     (index) => Food(
       id: index,
+      description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       title: 'Food Item $index',
       price: (index + 1) * 5,
       originalPrice: (index + 1) * 7,
