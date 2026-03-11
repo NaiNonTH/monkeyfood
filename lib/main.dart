@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:go_router/go_router.dart';
 import 'package:monkeyfood/cubit/cart_cubit.dart';
 import 'package:monkeyfood/cubit/favorite_cubit.dart';
 import 'package:monkeyfood/cubit/food_cubit.dart';
@@ -8,15 +10,68 @@ import 'package:monkeyfood/pages/cart_page.dart';
 import 'package:monkeyfood/pages/favorite_page.dart';
 import 'package:monkeyfood/pages/food_page.dart';
 import 'package:monkeyfood/pages/home_page.dart';
+import 'package:monkeyfood/pages/login_page.dart';
 import 'package:monkeyfood/pages/profile_page.dart';
 import 'package:monkeyfood/repositories/cart_repositories.dart';
 import 'package:monkeyfood/repositories/favorite_repositories.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
-import 'package:monkeyfood/services/navigation.dart';
+import 'package:monkeyfood/widgets/scaffold.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load();
+
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_KEY']!,
+  );
+
   runApp(const MainApp());
 }
+
+class SupabaseAuthNotifier extends ChangeNotifier {
+  SupabaseAuthNotifier() {
+    Supabase.instance.client.auth.onAuthStateChange.listen((_) {
+      notifyListeners();
+    });
+  }
+}
+
+final _authNotifier = SupabaseAuthNotifier();
+
+final _router = GoRouter(
+  initialLocation: '/home',
+  refreshListenable: _authNotifier,
+  redirect: (context, state) {
+    final isLoggedIn = Supabase.instance.client.auth.currentSession != null;
+    final isOnLoginPage = state.matchedLocation == '/login';
+
+    if (!isLoggedIn && !isOnLoginPage) return '/login';
+
+    if (isLoggedIn && isOnLoginPage) return '/home';
+
+    return null;
+  },
+  routes: [
+    ShellRoute(
+      builder: (context, state, child) => SharedScaffold(child: child),
+      routes: [
+        GoRoute(path: '/home', builder: (_, _) => HomePage()),
+        GoRoute(
+          path: '/food/:id',
+          builder: (_, state) =>
+              FoodPage(id: int.parse(state.pathParameters['id']!)),
+        ),
+        GoRoute(path: '/cart', builder: (_, _) => CartPage()),
+        GoRoute(path: '/profile', builder: (_, _) => ProfilePage()),
+        GoRoute(path: '/favorite', builder: (_, _) => FavoritePage()),
+      ],
+    ),
+    GoRoute(path: '/login', builder: (_, _) => LoginPage()),
+  ],
+);
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -32,27 +87,13 @@ class MainApp extends StatelessWidget {
           create: (context) => FavoriteCubit(FavoriteRepositories()),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        navigatorKey: NavigationService.navigatorKey,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
           useMaterial3: true,
         ),
-        routes: {
-          '/': (context) => HomePage(),
-          '/food': (context) =>
-              FoodPage(id: ModalRoute.of(context)?.settings.arguments as int),
-          '/cart': (context) => CartPage(),
-          '/profile': (context) => ProfilePage(),
-          '/favorite': (context) => FavoritePage(),
-        },
-        initialRoute: '/',
-        onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => Scaffold(
-            body: Center(child: Text('No route defined for ${settings.name}')),
-          ),
-        ),
+        routerConfig: _router,
       ),
     );
   }

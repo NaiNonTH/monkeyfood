@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/cubit/foods_cubit.dart';
@@ -22,37 +24,28 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: GlobalAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Carousel(),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 4.0,
-                right: 4.0,
-                bottom: 8.0,
-              ),
-              child: BlocBuilder<FoodsCubit, FoodsState>(
-                builder: (context, foodState) {
-                  switch (foodState) {
-                    case FoodsLoaded():
-                      return FoodCardGrid(foods: foodState.foods);
-                    case FoodsError():
-                      return Center(
-                        child: Text(
-                          'Something went wrong: ${foodState.message}',
-                        ),
-                      );
-                    default:
-                      return Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Carousel(),
+          Padding(
+            padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 8.0),
+            child: BlocBuilder<FoodsCubit, FoodsState>(
+              builder: (context, foodState) {
+                switch (foodState) {
+                  case FoodsLoaded():
+                    return FoodCardGrid(foods: foodState.foods);
+                  case FoodsError():
+                    return Center(
+                      child: Text('Something went wrong: ${foodState.message}'),
+                    );
+                  default:
+                    return Center(child: CircularProgressIndicator());
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

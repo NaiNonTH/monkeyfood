@@ -9,15 +9,15 @@ class FavoriteRepositories {
     return _favoriteItems;
   }
 
-  bool includes(Food Food) {
-    return _favoriteItems.contains(Food);
+  bool includes(Food food) {
+    return _favoriteItems.contains(food);
   }
 
-  void addToFavorite(Food Food) {
-    _favoriteItems.add(Food);
+  void addToFavorite(Food food) {
+    _favoriteItems.add(food);
   }
 
-  void removeFromFavorite(Food Food) {
-    _favoriteItems.remove(Food);
+  void removeFromFavorite(Food food) {
+    _favoriteItems.remove(food);
   }
 }

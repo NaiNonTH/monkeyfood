@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/widgets/food_card.dart';
 
@@ -30,7 +31,7 @@ class _FoodCardGridState extends State<FoodCardGrid> {
         Food food = widget.foods[index];
         return GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/food', arguments: food.id);
+            context.push('/food/$index');
           },
           child: FoodCard(food: food),
         );
