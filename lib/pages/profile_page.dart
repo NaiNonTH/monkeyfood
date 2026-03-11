@@ -80,7 +80,7 @@ class ProfilePage extends StatelessWidget {
               Expanded(
                 child: TextButton(
                   onPressed: () {
-                    context.go('/favorite');
+                    context.push('/favorite');
                   },
                   style: TextButton.styleFrom(
                     shape: RoundedRectangleBorder(
