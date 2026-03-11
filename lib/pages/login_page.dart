@@ -14,6 +14,13 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -33,7 +40,9 @@ class _LoginPageState extends State<LoginPage> {
                   TextFormField(
                     controller: _emailController,
                     validator: (value) {
-                      if (value!.isEmpty) return 'Please enter your E-mail';
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your E-mail';
+                      }
 
                       final RegExp emailRegex = RegExp(
                         r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -90,6 +99,23 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
+            ),
+            SizedBox(height: 16),
+            Wrap(
+              children: [
+                Text('New here? '),
+                GestureDetector(
+                  onTap: () {
+                    context.go('/register');
+                  },
+                  child: Text(
+                    'Register',
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 204, 122, 14),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

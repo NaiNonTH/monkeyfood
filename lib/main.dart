@@ -12,6 +12,7 @@ import 'package:monkeyfood/pages/food_page.dart';
 import 'package:monkeyfood/pages/home_page.dart';
 import 'package:monkeyfood/pages/login_page.dart';
 import 'package:monkeyfood/pages/profile_page.dart';
+import 'package:monkeyfood/pages/register_page.dart';
 import 'package:monkeyfood/repositories/cart_repositories.dart';
 import 'package:monkeyfood/repositories/favorite_repositories.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
@@ -46,11 +47,11 @@ final _router = GoRouter(
   refreshListenable: _authNotifier,
   redirect: (context, state) {
     final isLoggedIn = Supabase.instance.client.auth.currentSession != null;
-    final isOnLoginPage = state.matchedLocation == '/login';
+    final isOnAuth = ['/login', '/register'].contains(state.matchedLocation);
 
-    if (!isLoggedIn && !isOnLoginPage) return '/login';
+    if (!isLoggedIn && !isOnAuth) return '/login';
 
-    if (isLoggedIn && isOnLoginPage) return '/home';
+    if (isLoggedIn && isOnAuth) return '/home';
 
     return null;
   },
@@ -70,6 +71,7 @@ final _router = GoRouter(
       ],
     ),
     GoRoute(path: '/login', builder: (_, _) => LoginPage()),
+    GoRoute(path: '/register', builder: (_, _) => RegisterPage()),
   ],
 );
 
