@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -9,8 +10,11 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
   final _displayNameController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -19,6 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _phoneController.dispose();
     _displayNameController.dispose();
     super.dispose();
   }
@@ -39,6 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SizedBox(height: 32),
             Form(
+              key: _formKey,
               child: Column(
                 children: [
                   TextFormField(
@@ -81,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: 16),
                   TextFormField(
-                    controller: _displayNameController,
+                    controller: _phoneController,
                     decoration: InputDecoration(
                       filled: true,
                       labelText: 'Phone',
@@ -139,7 +145,30 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: 24),
                   FilledButton(
-                    onPressed: () async {},
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          await Supabase.instance.client.auth.signUp(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                            data: {
+                              'display_name': _displayNameController.text,
+                              'tel': _phoneController.text,
+                            },
+                          );
+
+                          if (context.mounted) {
+                            context.go('/home');
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: const Text('ERROR')),
+                            );
+                          }
+                        }
+                      }
+                    },
                     child: const Text('Register'),
                   ),
                 ],

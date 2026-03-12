@@ -10,6 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -35,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 48),
             Form(
+              key: _formKey,
               child: Column(
                 children: [
                   TextFormField(
@@ -68,30 +71,40 @@ class _LoginPageState extends State<LoginPage> {
                       filled: true,
                       labelText: 'Password',
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Password must not be blank.';
+                      }
+
+                      return null;
+                    },
                   ),
                   SizedBox(height: 24),
                   FilledButton(
                     onPressed: () async {
-                      try {
-                        await Supabase.instance.client.auth.signInWithPassword(
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                        );
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          await Supabase.instance.client.auth
+                              .signInWithPassword(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                              );
 
-                        if (context.mounted) {
-                          context.go('/home');
-                        }
-                      } on AuthException catch (e) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(
-                            context,
-                          ).showSnackBar(SnackBar(content: Text(e.message)));
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Unknown Error')),
-                          );
+                          if (context.mounted) {
+                            context.go('/home');
+                          }
+                        } on AuthException catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(SnackBar(content: Text(e.message)));
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Unknown Error')),
+                            );
+                          }
                         }
                       }
                     },
