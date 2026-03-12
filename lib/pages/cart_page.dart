@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/cubit/cart_cubit.dart';
+import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/cart_state.dart';
 
 class CartPage extends StatefulWidget {
@@ -33,8 +34,9 @@ class _CartPageState extends State<CartPage> {
         switch (state) {
           case CartLoaded():
             if (state.cartItems.isEmpty) {
-              return const Center(child: Text('Cart of Empty.'));
+              return const Center(child: Text('Cart is empty.'));
             }
+
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -48,7 +50,10 @@ class _CartPageState extends State<CartPage> {
                           width: 100,
                           height: 72,
                           child: Image.network(
-                            state.cartItems[index].item.imageName ?? '',
+                            FoodImageService.instance.url(
+                                  state.cartItems[index].item.imageName,
+                                ) ??
+                                '',
                             fit: BoxFit.cover,
                           ),
                         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/cubit/favorite_cubit.dart';
+import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/favorite_state.dart';
 
 class FavoritePage extends StatelessWidget {
@@ -20,7 +21,10 @@ class FavoritePage extends StatelessWidget {
                   width: 100,
                   height: 72,
                   child: Image.network(
-                    state.favoriteItems[index].imageName ?? '',
+                    FoodImageService.instance.url(
+                          state.favoriteItems[index].imageName,
+                        ) ??
+                        '',
                     fit: BoxFit.cover,
                   ),
                 ),

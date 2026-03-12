@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monkeyfood/models/food.dart';
+import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/widgets/favorite.dart';
 
 class FoodCard extends StatelessWidget {
@@ -16,9 +17,7 @@ class FoodCard extends StatelessWidget {
         children: [
           Expanded(
             child: Image.network(
-              (food.imageName != null)
-                  ? 'https://aymxpmooklbwlnojtltx.supabase.co/storage/v1/object/public/food-images/${food.imageName}'
-                  : '',
+              FoodImageService.instance.url(food.imageName) ?? '',
               fit: BoxFit.cover,
               width: double.infinity,
               errorBuilder: (context, error, stackTrace) =>

@@ -1,10 +1,10 @@
 import 'package:monkeyfood/models/food.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:monkeyfood/services/supabase_service.dart';
 
 class FoodRepositories {
   Future<List<Food>> getFoodEntries() async {
     try {
-      final res = await Supabase.instance.client
+      final res = await supabase
           .from('foods')
           .select()
           .order('id', ascending: true);
@@ -28,11 +28,7 @@ class FoodRepositories {
 
   Future<Food> getFoodById(int id) async {
     try {
-      final res = await Supabase.instance.client
-          .from('foods')
-          .select()
-          .eq('id', id)
-          .single();
+      final res = await supabase.from('foods').select().eq('id', id).single();
 
       return Food(
         title: res['title'],

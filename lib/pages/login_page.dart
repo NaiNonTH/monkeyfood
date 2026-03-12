@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkeyfood/services/supabase_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -84,11 +85,10 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         try {
-                          await Supabase.instance.client.auth
-                              .signInWithPassword(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                              );
+                          await supabase.auth.signInWithPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
 
                           if (context.mounted) {
                             context.go('/home');

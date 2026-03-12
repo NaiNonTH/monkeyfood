@@ -4,6 +4,7 @@ import 'package:monkeyfood/cubit/cart_cubit.dart';
 import 'package:monkeyfood/cubit/food_cubit.dart';
 import 'package:monkeyfood/cubit/foods_cubit.dart';
 import 'package:monkeyfood/models/cart_item.dart';
+import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/food_state.dart';
 import 'package:monkeyfood/states/foods_state.dart';
 import 'package:monkeyfood/widgets/favorite.dart';
@@ -41,9 +42,8 @@ class _FoodPageState extends State<FoodPage> {
                 child: Column(
                   children: [
                     Image.network(
-                      (foodState.food.imageName != null)
-                          ? 'https://aymxpmooklbwlnojtltx.supabase.co/storage/v1/object/public/food-images/${foodState.food.imageName}'
-                          : '',
+                      FoodImageService.instance.url(foodState.food.imageName) ??
+                          '',
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 600,

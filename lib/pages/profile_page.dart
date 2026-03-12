@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkeyfood/services/supabase_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -8,10 +9,10 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Supabase.instance.client
+      future: supabase
           .from('profiles')
           .select()
-          .eq('id', Supabase.instance.client.auth.currentUser!.id)
+          .eq('id', supabase.auth.currentUser!.id)
           .single(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -26,7 +27,7 @@ class ProfilePage extends StatelessWidget {
                 title: const Text('Sign Out'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 14),
                 onTap: () async {
-                  await Supabase.instance.client.auth.signOut();
+                  await supabase.auth.signOut();
 
                   if (context.mounted) {
                     context.go('/login');
@@ -165,7 +166,7 @@ class ProfilePage extends StatelessWidget {
                     title: const Text('Sign Out'),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 14),
                     onTap: () async {
-                      await Supabase.instance.client.auth.signOut();
+                      await supabase.auth.signOut();
 
                       if (context.mounted) {
                         context.go('/login');

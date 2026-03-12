@@ -16,6 +16,7 @@ import 'package:monkeyfood/pages/register_page.dart';
 import 'package:monkeyfood/repositories/cart_repositories.dart';
 import 'package:monkeyfood/repositories/favorite_repositories.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
+import 'package:monkeyfood/services/supabase_service.dart';
 import 'package:monkeyfood/widgets/scaffold.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -34,7 +35,7 @@ Future<void> main() async {
 
 class SupabaseAuthNotifier extends ChangeNotifier {
   SupabaseAuthNotifier() {
-    Supabase.instance.client.auth.onAuthStateChange.listen((_) {
+    supabase.auth.onAuthStateChange.listen((_) {
       notifyListeners();
     });
   }
@@ -46,7 +47,7 @@ final _router = GoRouter(
   initialLocation: '/home',
   refreshListenable: _authNotifier,
   redirect: (context, state) {
-    final isLoggedIn = Supabase.instance.client.auth.currentSession != null;
+    final isLoggedIn = supabase.auth.currentSession != null;
     final isOnAuth = ['/login', '/register'].contains(state.matchedLocation);
 
     if (!isLoggedIn && !isOnAuth) return '/login';
