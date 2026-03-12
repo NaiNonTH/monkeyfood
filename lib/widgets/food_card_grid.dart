@@ -31,7 +31,7 @@ class _FoodCardGridState extends State<FoodCardGrid> {
         Food food = widget.foods[index];
         return GestureDetector(
           onTap: () {
-            context.push('/food/$index');
+            context.push('/food/${food.id}');
           },
           child: FoodCard(food: food),
         );

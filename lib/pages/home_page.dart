@@ -24,28 +24,44 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Carousel(),
-          Padding(
-            padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 8.0),
-            child: BlocBuilder<FoodsCubit, FoodsState>(
-              builder: (context, foodState) {
-                switch (foodState) {
-                  case FoodsLoaded():
-                    return FoodCardGrid(foods: foodState.foods);
-                  case FoodsError():
-                    return Center(
-                      child: Text('Something went wrong: ${foodState.message}'),
-                    );
-                  default:
-                    return Center(child: CircularProgressIndicator());
-                }
-              },
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<FoodsCubit>().loadFoodEntries();
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Carousel(),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 4.0,
+                right: 4.0,
+                bottom: 8.0,
+              ),
+              child: BlocBuilder<FoodsCubit, FoodsState>(
+                builder: (context, foodState) {
+                  switch (foodState) {
+                    case FoodsLoaded():
+                      return FoodCardGrid(foods: foodState.foods);
+                    case FoodsError():
+                      return Center(
+                        child: Text(
+                          'Something went wrong: ${foodState.message}',
+                        ),
+                      );
+                    default:
+                      return Center(
+                        child: Container(
+                          margin: EdgeInsets.only(top: 32),
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

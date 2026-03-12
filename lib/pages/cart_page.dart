@@ -48,7 +48,7 @@ class _CartPageState extends State<CartPage> {
                           width: 100,
                           height: 72,
                           child: Image.network(
-                            state.cartItems[index].item.imageUrl ?? '',
+                            state.cartItems[index].item.imageName ?? '',
                             fit: BoxFit.cover,
                           ),
                         ),

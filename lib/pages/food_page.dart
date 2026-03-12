@@ -28,163 +28,173 @@ class _FoodPageState extends State<FoodPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FoodCubit, FoodState>(
-      builder: (context, foodState) {
-        switch (foodState) {
-          case FoodLoaded():
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Image.network(
-                    foodState.food.imageUrl ?? '',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 600,
-                    errorBuilder: (context, error, stackTrace) =>
-                        Center(child: Icon(Icons.error_outline)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              foodState.food.title,
-                              style: TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            FavoriteButton(food: foodState.food),
-                          ],
-                        ),
-                        SizedBox(height: 4.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '\$${foodState.food.price}',
-                                  style: TextStyle(
-                                    fontSize: 22.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(width: 4.0),
-                                Text(
-                                  foodState.food.originalPrice !=
-                                          foodState.food.price
-                                      ? '\$${foodState.food.originalPrice}'
-                                      : '',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey,
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.orange,
-                                  size: 20.0,
-                                ),
-                                SizedBox(width: 4.0),
-                                Text(foodState.food.rating.toStringAsFixed(2)),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16.0),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              final messenger = ScaffoldMessenger.of(context);
-
-                              context.read<CartCubit>().addCartItem(
-                                CartItem(foodState.food),
-                              );
-
-                              messenger.showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Added ${foodState.food.title} to Cart',
-                                  ),
-                                ),
-                              );
-                            },
-                            child: const Text('Add to Cart'),
-                          ),
-                        ),
-                        SizedBox(height: 16.0),
-                        Row(
-                          children: [
-                            Icon(Icons.account_circle, size: 32.0),
-                            SizedBox(width: 8.0),
-                            Text(
-                              "Restaurant Name",
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          foodState.food.description,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    indent: 4.0,
-                    endIndent: 4.0,
-                    thickness: 1,
-                    color: Colors.grey[300],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: BlocBuilder<FoodsCubit, FoodsState>(
-                      builder: (context, foodsState) {
-                        switch (foodsState) {
-                          case FoodsLoaded():
-                            return FoodCardGrid(foods: foodsState.foods);
-                          case FoodsError():
-                            return Center(
-                              child: Text(
-                                'Something went wrong: ${foodsState.message}',
-                              ),
-                            );
-                          default:
-                            return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          case FoodError():
-            return Center(
-              child: Text('Something went wrong: ${foodState.message}'),
-            );
-          default:
-            return Center(child: CircularProgressIndicator());
-        }
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<FoodCubit>().loadFoodById(widget.id);
+        context.read<FoodsCubit>().loadFoodEntries();
       },
+      child: BlocBuilder<FoodCubit, FoodState>(
+        builder: (context, foodState) {
+          switch (foodState) {
+            case FoodLoaded():
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Image.network(
+                      (foodState.food.imageName != null)
+                          ? 'https://aymxpmooklbwlnojtltx.supabase.co/storage/v1/object/public/food-images/${foodState.food.imageName}'
+                          : '',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 600,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Center(child: Icon(Icons.error_outline)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                foodState.food.title,
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              FavoriteButton(food: foodState.food),
+                            ],
+                          ),
+                          SizedBox(height: 4.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    '\$${foodState.food.price}',
+                                    style: TextStyle(
+                                      fontSize: 22.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(width: 4.0),
+                                  Text(
+                                    foodState.food.originalPrice !=
+                                            foodState.food.price
+                                        ? '\$${foodState.food.originalPrice}'
+                                        : '',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.grey,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.orange,
+                                    size: 20.0,
+                                  ),
+                                  SizedBox(width: 4.0),
+                                  Text(
+                                    foodState.food.rating.toStringAsFixed(2),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16.0),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                final messenger = ScaffoldMessenger.of(context);
+
+                                context.read<CartCubit>().addCartItem(
+                                  CartItem(foodState.food),
+                                );
+
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Added ${foodState.food.title} to Cart',
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: const Text('Add to Cart'),
+                            ),
+                          ),
+                          SizedBox(height: 16.0),
+                          Row(
+                            children: [
+                              Icon(Icons.account_circle, size: 32.0),
+                              SizedBox(width: 8.0),
+                              Text(
+                                "Restaurant Name",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8.0),
+                          Text(
+                            foodState.food.description,
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      indent: 4.0,
+                      endIndent: 4.0,
+                      thickness: 1,
+                      color: Colors.grey[300],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: BlocBuilder<FoodsCubit, FoodsState>(
+                        builder: (context, foodsState) {
+                          switch (foodsState) {
+                            case FoodsLoaded():
+                              return FoodCardGrid(foods: foodsState.foods);
+                            case FoodsError():
+                              return Center(
+                                child: Text(
+                                  'Something went wrong: ${foodsState.message}',
+                                ),
+                              );
+                            default:
+                              return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            case FoodError():
+              return Center(
+                child: Text('Something went wrong: ${foodState.message}'),
+              );
+            default:
+              return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 }

@@ -17,11 +17,11 @@ class FavoriteCubit extends Cubit<FavoriteState> {
 
   void addFavoriteItem(Food food) {
     favoriteRepositories.addToFavorite(food);
-    loadFavoriteItems();
+    emit(state.copyWith(favoriteRepositories.getFavoriteItems()));
   }
 
   void removeFavoriteItem(Food food) {
     favoriteRepositories.removeFromFavorite(food);
-    loadFavoriteItems();
+    emit(state.copyWith(favoriteRepositories.getFavoriteItems()));
   }
 }

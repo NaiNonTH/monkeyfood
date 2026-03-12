@@ -16,7 +16,9 @@ class FoodCard extends StatelessWidget {
         children: [
           Expanded(
             child: Image.network(
-              food.imageUrl ?? '',
+              (food.imageName != null)
+                  ? 'https://aymxpmooklbwlnojtltx.supabase.co/storage/v1/object/public/food-images/${food.imageName}'
+                  : '',
               fit: BoxFit.cover,
               width: double.infinity,
               errorBuilder: (context, error, stackTrace) =>

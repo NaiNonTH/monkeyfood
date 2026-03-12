@@ -18,6 +18,6 @@ class FavoriteRepositories {
   }
 
   void removeFromFavorite(Food food) {
-    _favoriteItems.remove(food);
+    _favoriteItems.removeWhere((favoriteItem) => favoriteItem.id == food.id);
   }
 }

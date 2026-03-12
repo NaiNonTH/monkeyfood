@@ -20,7 +20,7 @@ class FavoritePage extends StatelessWidget {
                   width: 100,
                   height: 72,
                   child: Image.network(
-                    state.favoriteItems[index].imageUrl ?? '',
+                    state.favoriteItems[index].imageName ?? '',
                     fit: BoxFit.cover,
                   ),
                 ),

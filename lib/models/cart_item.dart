@@ -5,8 +5,8 @@ import 'package:monkeyfood/models/food.dart';
 class CartItem {
   final Food item;
   int amount;
-  int totalPrice;
-  int totalOriginalPrice;
+  double totalPrice;
+  double totalOriginalPrice;
 
   CartItem(this.item, {this.amount = 1})
     : totalPrice = item.price * amount,

@@ -13,7 +13,11 @@ class FavoriteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
-        final isFavorite = state.favoriteItems.contains(food);
+        final isFavorite =
+            state.favoriteItems
+                .where((favoriteItem) => favoriteItem.id == food.id)
+                .firstOrNull !=
+            null;
 
         return GestureDetector(
           onTap: () {

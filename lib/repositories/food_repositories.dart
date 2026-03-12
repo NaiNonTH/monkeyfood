@@ -1,31 +1,55 @@
-import 'dart:math';
-
 import 'package:monkeyfood/models/food.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FoodRepositories {
-  static final _dummyFoodEntires = List.generate(
-    10,
-    (index) => Food(
-      id: index,
-      description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      title: 'Food Item $index',
-      price: (index + 1) * 5,
-      originalPrice: (index + 1) * 7,
-      rating: min(Random().nextDouble() * 5 + 3, 5),
-      imageUrl: 'https://picsum.photos/300/400?random=$index',
-    ),
-  );
-
   Future<List<Food>> getFoodEntries() async {
-    await Future.delayed(Duration(seconds: 1));
+    try {
+      final res = await Supabase.instance.client
+          .from('foods')
+          .select()
+          .order('id', ascending: true);
 
-    return _dummyFoodEntires;
+      return res
+          .map(
+            (value) => Food(
+              title: value['title'],
+              description: value['description'],
+              price: value['price'].toDouble(),
+              originalPrice: value['original_price'].toDouble(),
+              imageName: value['image_name'],
+              id: value['id'],
+            ),
+          )
+          .toList();
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<Food> getFoodById(int id) async {
-    await Future.delayed(Duration(seconds: 1));
+    try {
+      final res = await Supabase.instance.client
+          .from('foods')
+          .select()
+          .eq('id', id)
+          .single();
 
-    return _dummyFoodEntires[id];
+      return Food(
+        title: res['title'],
+        description: res['description'],
+        price: res['price'].toDouble(),
+        originalPrice: res['original_price'].toDouble(),
+        imageName: res['image_name'],
+        id: res['id'],
+      );
+    } catch (e) {
+      return Food(
+        title: 'No Food',
+        description: 'ERROR ERROR!',
+        price: 0.00,
+        originalPrice: 0.00,
+        id: id,
+      );
+    }
   }
 }
