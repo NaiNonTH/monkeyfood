@@ -31,12 +31,12 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             SizedBox(height: 160),
-            Icon(Icons.delivery_dining, size: 96),
+            Image.asset('assets/images/logo.png', width: 140, height: 140),
             Text(
               'MonkeyFood',
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 48),
+            SizedBox(height: 32),
             Form(
               key: _formKey,
               child: Column(
