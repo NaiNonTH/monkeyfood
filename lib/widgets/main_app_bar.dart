@@ -17,28 +17,23 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
         final canPop = context.canPop(); // ✅ GoRouter-aware pop check
 
         return AppBar(
-          backgroundColor: Colors.orangeAccent,
-          // ✅ Manually show back button when there's something to pop
           leading: canPop
               ? IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () => context.pop(),
                 )
-              : null,
+              : Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    top: 4.0,
+                    bottom: 4.0,
+                  ),
+                  child: Image.asset('assets/images/logo.png'),
+                ),
           title: const Text(
             'MonkeyFood',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.shopping_cart),
-              onPressed: () => context.push('/cart'),
-            ),
-            IconButton(
-              icon: const Icon(Icons.account_circle),
-              onPressed: () => context.push('/profile'),
-            ),
-          ],
         );
       },
     );

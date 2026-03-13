@@ -105,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Expanded(
                         child: TextButton(
                           onPressed: () {
-                            context.push('/favorite');
+                            context.push('/profile/favorite');
                           },
                           style: TextButton.styleFrom(
                             shape: RoundedRectangleBorder(

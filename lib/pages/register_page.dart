@@ -158,7 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           );
 
                           if (context.mounted) {
-                            context.go('/home');
+                            context.go('/');
                           }
                         } catch (e) {
                           if (context.mounted) {

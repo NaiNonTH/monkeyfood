@@ -18,8 +18,8 @@ class CartRepositories {
       final foodObj = Food(
         title: foodItem['title'],
         description: foodItem['description'],
-        price: foodItem['price'],
-        originalPrice: foodItem['original_price'],
+        price: foodItem['price'].toDouble(),
+        originalPrice: foodItem['original_price'].toDouble(),
         imageName: foodItem['image_name'],
         id: foodItem['id'],
       );

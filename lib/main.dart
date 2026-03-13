@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkeyfood/cubit/add_to_cart_cubit.dart';
 import 'package:monkeyfood/cubit/cart_cubit.dart';
 import 'package:monkeyfood/cubit/favorite_cubit.dart';
 import 'package:monkeyfood/cubit/food_cubit.dart';
@@ -35,42 +36,52 @@ Future<void> main() async {
   runApp(const MainApp());
 }
 
-class SupabaseAuthNotifier extends ChangeNotifier {
-  SupabaseAuthNotifier() {
-    supabase.auth.onAuthStateChange.listen((_) {
-      notifyListeners();
-    });
-  }
-}
-
-final _authNotifier = SupabaseAuthNotifier();
-
 final _router = GoRouter(
-  initialLocation: '/home',
-  refreshListenable: _authNotifier,
+  initialLocation: '/',
   redirect: (context, state) {
     final isLoggedIn = supabase.auth.currentSession != null;
     final isOnAuth = ['/login', '/register'].contains(state.matchedLocation);
 
     if (!isLoggedIn && !isOnAuth) return '/login';
 
-    if (isLoggedIn && isOnAuth) return '/home';
+    if (isLoggedIn && isOnAuth) return '/';
 
     return null;
   },
   routes: [
-    ShellRoute(
-      builder: (context, state, child) => SharedScaffold(child: child),
-      routes: [
-        GoRoute(path: '/home', builder: (_, _) => HomePage()),
-        GoRoute(
-          path: '/food/:id',
-          builder: (_, state) =>
-              FoodPage(id: int.parse(state.pathParameters['id']!)),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) =>
+          SharedScaffold(navigationShell: navigationShell),
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/',
+              builder: (_, _) => HomePage(),
+              routes: [
+                GoRoute(
+                  path: 'food/:id',
+                  builder: (_, state) =>
+                      FoodPage(id: int.parse(state.pathParameters['id']!)),
+                ),
+              ],
+            ),
+          ],
         ),
-        GoRoute(path: '/cart', builder: (_, _) => CartPage()),
-        GoRoute(path: '/profile', builder: (_, _) => ProfilePage()),
-        GoRoute(path: '/favorite', builder: (_, _) => FavoritePage()),
+        StatefulShellBranch(
+          routes: [GoRoute(path: '/cart', builder: (_, _) => CartPage())],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/profile',
+              builder: (_, _) => ProfilePage(),
+              routes: [
+                GoRoute(path: 'favorite', builder: (_, _) => FavoritePage()),
+              ],
+            ),
+          ],
+        ),
       ],
     ),
     GoRoute(path: '/login', builder: (_, _) => LoginPage()),
@@ -89,6 +100,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => FoodCubit(FoodRepositories())),
         BlocProvider(create: (context) => FoodsCubit(FoodRepositories())),
         BlocProvider(create: (context) => CartCubit(CartRepositories())),
+        BlocProvider(create: (context) => AddToCartCubit(CartRepositories())),
         BlocProvider(
           create: (context) => FavoriteCubit(FavoriteRepositories()),
         ),
