@@ -31,169 +31,184 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsetsGeometry.all(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                'Sign Up',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment.center,
+            radius: 1.2,
+            colors: [
+              const Color.fromARGB(255, 255, 238, 215),
+              const Color.fromARGB(255, 255, 231, 194),
+            ],
+            stops: [0.8, 0.8],
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  'Sign Up',
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            SizedBox(height: 32),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _emailController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your E-mail';
-                      }
+              SizedBox(height: 32),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    _buildTextField(
+                      controller: _emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your E-mail';
+                        }
 
-                      final RegExp emailRegex = RegExp(
-                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                        caseSensitive: false,
-                      );
+                        final RegExp emailRegex = RegExp(
+                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                          caseSensitive: false,
+                        );
 
-                      if (!emailRegex.hasMatch(value)) {
-                        return 'This is not a valid E-mail.';
-                      }
+                        if (!emailRegex.hasMatch(value)) {
+                          return 'This is not a valid E-mail.';
+                        }
 
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'E-mail',
+                        return null;
+                      },
+                      label: 'E-mail',
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _displayNameController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Display Name',
+                    SizedBox(height: 16),
+                    _buildTextField(
+                      controller: _displayNameController,
+                      label: 'Display Name',
+                      validator: (value) {
+                        if (value == null || value == '') {
+                          return 'Display Name must not be blank';
+                        }
+
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value == '') {
-                        return 'Display Name must not be blank';
-                      }
+                    SizedBox(height: 16),
+                    _buildTextField(
+                      controller: _phoneController,
+                      label: 'Phone',
+                      validator: (value) {
+                        if (value == null || value == '') {
+                          return 'Telephone Number must not be blank';
+                        }
 
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _phoneController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Phone',
+                        final RegExp phoneRegex = RegExp(r'\d{10}');
+
+                        if (!phoneRegex.hasMatch(value)) {
+                          return 'Telephone Number must be 10 numbers';
+                        }
+
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value == '') {
-                        return 'Telephone Number must not be blank';
-                      }
+                    SizedBox(height: 16),
+                    _buildTextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      label: 'Password',
+                      validator: (value) {
+                        if (value == null || value == '') {
+                          return 'Password must not be blank';
+                        }
 
-                      final RegExp phoneRegex = RegExp(r'\d{10}');
+                        if (value.length < 8) {
+                          return 'Password must be at least 8 characters long.';
+                        }
 
-                      if (!phoneRegex.hasMatch(value)) {
-                        return 'Telephone Number must be 10 numbers';
-                      }
-
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Password',
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value == '') {
-                        return 'Password must not be blank';
-                      }
+                    SizedBox(height: 16),
+                    _buildTextField(
+                      controller: _confirmPasswordController,
+                      obscureText: true,
+                      label: 'Confirm Password',
+                      validator: (value) {
+                        if (_confirmPasswordController.text !=
+                            _passwordController.text) {
+                          return 'Passwords do not match.';
+                        }
 
-                      if (value.length < 8) {
-                        return 'Password must be at least 8 characters long.';
-                      }
-
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Confirm Password',
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (_confirmPasswordController.text !=
-                          _passwordController.text) {
-                        return 'Passwords do not match.';
-                      }
-
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 24),
-                  FilledButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        try {
-                          await supabase.auth.signUp(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                            data: {
-                              'display_name': _displayNameController.text,
-                              'tel': _phoneController.text,
-                            },
-                          );
-
-                          if (context.mounted) {
-                            context.go('/');
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: const Text('ERROR')),
+                    SizedBox(height: 24),
+                    FilledButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            await supabase.auth.signUp(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              data: {
+                                'display_name': _displayNameController.text,
+                                'tel': _phoneController.text,
+                              },
                             );
+
+                            if (context.mounted) {
+                              context.go('/');
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: const Text('ERROR')),
+                              );
+                            }
                           }
                         }
-                      }
+                      },
+                      child: const Text('Register'),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 32),
+              Wrap(
+                children: [
+                  Text('Already have an account? '),
+                  GestureDetector(
+                    onTap: () {
+                      context.go('/login');
                     },
-                    child: const Text('Register'),
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 255, 96, 0),
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: 32),
-            Wrap(
-              children: [
-                Text('Already have an account? '),
-                GestureDetector(
-                  onTap: () {
-                    context.go('/login');
-                  },
-                  child: Text(
-                    'Sign In',
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 204, 122, 14),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String label,
+    required TextEditingController controller,
+    required FormFieldValidator validator,
+    bool obscureText = false,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: label,
+        contentPadding: EdgeInsets.all(8),
+      ),
+      validator: validator,
     );
   }
 }
