@@ -171,57 +171,57 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusGeometry.all(
-                                Radius.zero,
-                              ),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Icon(Icons.assignment, size: 32),
-                              SizedBox(height: 4),
-                              Text('Track My Order'),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      top: 16.0,
-                      bottom: 4.0,
-                    ),
-                    child: Text(
-                      'Account Settings',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  ListView(
-                    shrinkWrap: true,
-                    children: [
-                      ListTile(
-                        title: const Text('Edit Restaurant Info'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                        onTap: () {},
-                      ),
-                      Divider(height: 1),
-                      ListTile(
-                        title: const Text('Manage Menus'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                        onTap: () {},
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: TextButton(
+                  //         onPressed: () {},
+                  //         style: TextButton.styleFrom(
+                  //           shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadiusGeometry.all(
+                  //               Radius.zero,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         child: Column(
+                  //           children: [
+                  //             Icon(Icons.assignment, size: 32),
+                  //             SizedBox(height: 4),
+                  //             Text('Track My Order'),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(
+                  //     left: 16.0,
+                  //     right: 16.0,
+                  //     top: 16.0,
+                  //     bottom: 4.0,
+                  //   ),
+                  //   child: Text(
+                  //     'Account Settings',
+                  //     style: TextStyle(color: Colors.grey),
+                  //   ),
+                  // ),
+                  // ListView(
+                  //   shrinkWrap: true,
+                  //   children: [
+                  //     ListTile(
+                  //       title: const Text('Edit Restaurant Info'),
+                  //       trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                  //       onTap: () {},
+                  //     ),
+                  //     Divider(height: 1),
+                  //     ListTile(
+                  //       title: const Text('Manage Menus'),
+                  //       trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                  //       onTap: () {},
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             );
