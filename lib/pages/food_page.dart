@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/cubit/cart_cubit.dart';
 import 'package:monkeyfood/cubit/food_cubit.dart';
 import 'package:monkeyfood/cubit/foods_cubit.dart';
-import 'package:monkeyfood/models/cart_item.dart';
 import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/food_state.dart';
 import 'package:monkeyfood/states/foods_state.dart';
@@ -75,7 +74,7 @@ class _FoodPageState extends State<FoodPage> {
                               Row(
                                 children: [
                                   Text(
-                                    '\$${foodState.food.price}',
+                                    '\$${foodState.food.price.toStringAsFixed(2)}',
                                     style: TextStyle(
                                       fontSize: 22.0,
                                       fontWeight: FontWeight.bold,
@@ -85,7 +84,7 @@ class _FoodPageState extends State<FoodPage> {
                                   Text(
                                     foodState.food.originalPrice !=
                                             foodState.food.price
-                                        ? '\$${foodState.food.originalPrice}'
+                                        ? '\$${foodState.food.originalPrice.toStringAsFixed(2)}'
                                         : '',
                                     style: TextStyle(
                                       fontSize: 16.0,
@@ -119,7 +118,7 @@ class _FoodPageState extends State<FoodPage> {
                                 final messenger = ScaffoldMessenger.of(context);
 
                                 context.read<CartCubit>().addCartItem(
-                                  CartItem(foodState.food),
+                                  foodState.food.id,
                                 );
 
                                 messenger.showSnackBar(

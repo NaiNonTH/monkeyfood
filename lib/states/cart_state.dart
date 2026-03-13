@@ -17,10 +17,10 @@ class CartItemAdded extends CartState {}
 class CartUpdatingAmount extends CartState {}
 
 class CartItemUpdated extends CartState {
-  final int id;
-  final int amount;
+  // final int id;
+  // final int amount;
 
-  CartItemUpdated({required this.id, required this.amount});
+  // CartItemUpdated({required this.id, required this.amount});
 }
 
 class CartItemDeleted extends CartState {

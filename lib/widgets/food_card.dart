@@ -43,7 +43,7 @@ class FoodCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '\$${food.price}',
+                          '\$${food.price.toStringAsFixed(2)}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 22.0,
@@ -52,7 +52,7 @@ class FoodCard extends StatelessWidget {
                         SizedBox(width: 4.0),
                         Text(
                           food.originalPrice != food.price
-                              ? '\$${food.originalPrice}'
+                              ? '\$${food.originalPrice.toStringAsFixed(2)}'
                               : '',
                           style: TextStyle(
                             decoration: TextDecoration.lineThrough,
