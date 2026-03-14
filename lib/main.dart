@@ -7,6 +7,7 @@ import 'package:monkeyfood/cubit/cart_cubit.dart';
 import 'package:monkeyfood/cubit/favorite_cubit.dart';
 import 'package:monkeyfood/cubit/food_cubit.dart';
 import 'package:monkeyfood/cubit/foods_cubit.dart';
+import 'package:monkeyfood/cubit/order_cubit.dart';
 import 'package:monkeyfood/cubit/place_order_cubit.dart';
 import 'package:monkeyfood/cubit/profile_cubit.dart';
 import 'package:monkeyfood/pages/cart_page.dart';
@@ -16,6 +17,7 @@ import 'package:monkeyfood/pages/home_page.dart';
 import 'package:monkeyfood/pages/login_page.dart';
 import 'package:monkeyfood/pages/profile_page.dart';
 import 'package:monkeyfood/pages/register_page.dart';
+import 'package:monkeyfood/pages/track_my_order_page.dart';
 import 'package:monkeyfood/repositories/cart_repositories.dart';
 import 'package:monkeyfood/repositories/favorite_repositories.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
@@ -79,6 +81,10 @@ final _router = GoRouter(
               path: '/profile',
               builder: (_, _) => ProfilePage(),
               routes: [
+                GoRoute(
+                  path: 'track-my-order',
+                  builder: (_, _) => TrackMyOrderPage(),
+                ),
                 GoRoute(path: 'favorite', builder: (_, _) => FavoritePage()),
               ],
             ),
@@ -103,6 +109,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => FoodsCubit(FoodRepositories())),
         BlocProvider(create: (context) => CartCubit(CartRepositories())),
         BlocProvider(create: (context) => AddToCartCubit(CartRepositories())),
+        BlocProvider(create: (context) => OrderCubit(OrderRepositories())),
         BlocProvider(create: (context) => PlaceOrderCubit(OrderRepositories())),
         BlocProvider(
           create: (context) => FavoriteCubit(FavoriteRepositories()),

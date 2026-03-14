@@ -66,7 +66,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Expanded(
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.push('/profile/track-my-order');
+                          },
                           style: TextButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadiusGeometry.all(

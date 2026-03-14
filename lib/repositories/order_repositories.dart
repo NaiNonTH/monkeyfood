@@ -9,36 +9,34 @@ class OrderRepositories {
         .from('orders')
         .select('''
           *,
-          order_items(*, foods(*)),
+          order_items(*, foods(*))
         ''')
         .eq('user_id', supabase.auth.currentUser!.id);
 
     return res.map((order) {
-      final orderItems = order['order_items'].map((orderItem) {
-        final foods = orderItem['foods'].map(
-          (food) => Food(
-            title: food['title'],
-            description: food['description'],
-            price: food['price'],
-            originalPrice: food['original_price'],
-            id: food['id'],
-          ),
-        );
-
-        return OrderItem(
-          id: orderItem['id'],
-          amount: orderItem['amount'],
-          food: foods,
-          unitPrice: orderItem['unit_price'],
-          status: OrderStatus.values.byName(orderItem['status']),
-        );
-      });
+      final orderItems = (order['order_items'] as List)
+          .map<OrderItem>(
+            (orderItem) => OrderItem(
+              id: orderItem['id'],
+              amount: orderItem['amount'],
+              food: Food(
+                id: orderItem['foods']['id'],
+                title: orderItem['foods']['title'],
+                description: orderItem['foods']['description'],
+                price: orderItem['foods']['price'].toDouble(),
+                originalPrice: orderItem['foods']['original_price'].toDouble(),
+                imageName: orderItem['foods']['image_name'],
+              ),
+              unitPrice: orderItem['unit_price'],
+              status: OrderStatus.values.byName(orderItem['status']),
+            ),
+          )
+          .toList();
 
       return Order(
         id: order['id'],
         items: orderItems,
-        profile: order['profile'],
-        totalPrice: order['totalPrice'],
+        totalPrice: order['total_price'].toDouble(),
       );
     }).toList();
   }

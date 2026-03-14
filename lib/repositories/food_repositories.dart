@@ -12,12 +12,12 @@ class FoodRepositories {
       return res
           .map(
             (value) => Food(
+              id: value['id'],
               title: value['title'],
               description: value['description'],
               price: value['price'].toDouble(),
               originalPrice: value['original_price'].toDouble(),
               imageName: value['image_name'],
-              id: value['id'],
             ),
           )
           .toList();
@@ -40,11 +40,12 @@ class FoodRepositories {
       );
     } catch (e) {
       return Food(
+        id: id,
         title: 'No Food',
         description: 'ERROR ERROR!',
         price: 0.00,
         originalPrice: 0.00,
-        id: id,
+        imageName: '',
       );
     }
   }

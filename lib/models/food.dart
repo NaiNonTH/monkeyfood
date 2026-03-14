@@ -8,13 +8,13 @@ class Food {
   final double rating;
 
   Food({
+    required this.id,
     required this.title,
     required this.description,
     required this.price,
     required this.originalPrice,
-    required this.id,
+    required this.imageName,
     this.rating = 5.00,
-    this.imageName,
   });
 
   Food copyWith({
