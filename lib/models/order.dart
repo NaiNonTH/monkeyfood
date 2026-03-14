@@ -1,5 +1,4 @@
 import 'package:monkeyfood/models/food.dart';
-import 'package:monkeyfood/models/profile.dart';
 
 enum OrderStatus { preparing, delivering, delivered }
 
