@@ -12,7 +12,7 @@ class PlaceOrderCubit extends Cubit<PlaceOrderState> {
     emit(PlacingOrder());
 
     try {
-      orderRepositories.placeOrder(cartItems);
+      await orderRepositories.placeOrder(cartItems);
 
       emit(OrderPlaced());
     } catch (e) {
