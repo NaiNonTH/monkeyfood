@@ -108,7 +108,11 @@ class _LoginPageState extends State<LoginPage> {
                           } catch (e) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Unknown Error')),
+                                SnackBar(
+                                  content: Text(
+                                    'Unknown Error: ${e.toString()}',
+                                  ),
+                                ),
                               );
                             }
                           }

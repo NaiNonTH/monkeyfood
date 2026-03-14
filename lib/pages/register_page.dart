@@ -160,7 +160,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           } catch (e) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: const Text('ERROR')),
+                                SnackBar(
+                                  content: Text(
+                                    'Unknown Error: ${e.toString()}',
+                                  ),
+                                ),
                               );
                             }
                           }
