@@ -7,6 +7,7 @@ import 'package:monkeyfood/cubit/cart_cubit.dart';
 import 'package:monkeyfood/cubit/favorite_cubit.dart';
 import 'package:monkeyfood/cubit/food_cubit.dart';
 import 'package:monkeyfood/cubit/foods_cubit.dart';
+import 'package:monkeyfood/cubit/place_order_cubit.dart';
 import 'package:monkeyfood/cubit/profile_cubit.dart';
 import 'package:monkeyfood/pages/cart_page.dart';
 import 'package:monkeyfood/pages/favorite_page.dart';
@@ -18,6 +19,7 @@ import 'package:monkeyfood/pages/register_page.dart';
 import 'package:monkeyfood/repositories/cart_repositories.dart';
 import 'package:monkeyfood/repositories/favorite_repositories.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
+import 'package:monkeyfood/repositories/order_repositories.dart';
 import 'package:monkeyfood/repositories/profile_repositories.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
 import 'package:monkeyfood/widgets/scaffold.dart';
@@ -101,6 +103,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => FoodsCubit(FoodRepositories())),
         BlocProvider(create: (context) => CartCubit(CartRepositories())),
         BlocProvider(create: (context) => AddToCartCubit(CartRepositories())),
+        BlocProvider(create: (context) => PlaceOrderCubit(OrderRepositories())),
         BlocProvider(
           create: (context) => FavoriteCubit(FavoriteRepositories()),
         ),

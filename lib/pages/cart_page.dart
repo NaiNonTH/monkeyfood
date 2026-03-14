@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/cubit/add_to_cart_cubit.dart';
 import 'package:monkeyfood/cubit/cart_cubit.dart';
+import 'package:monkeyfood/cubit/place_order_cubit.dart';
 import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/add_to_cart_state.dart';
 import 'package:monkeyfood/states/cart_state.dart';
+import 'package:monkeyfood/states/place_order_state.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -27,12 +29,30 @@ class _CartPageState extends State<CartPage> {
       onRefresh: () async {
         context.read<CartCubit>().loadCartItems();
       },
-      child: BlocListener<AddToCartCubit, AddToCartState>(
-        listener: (context, addToCartState) {
-          if (addToCartState is AddedToCart) {
-            context.read<CartCubit>().loadCartItems();
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<AddToCartCubit, AddToCartState>(
+            listener: (context, addToCartState) {
+              if (addToCartState is AddedToCart) {
+                context.read<CartCubit>().loadCartItems();
+              }
+            },
+          ),
+          BlocListener<PlaceOrderCubit, PlaceOrderState>(
+            listener: (context, placeOrderState) {
+              if (placeOrderState is OrderPlaced) {
+                context.read<CartCubit>().loadCartItems();
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('Order Placed')));
+              } else if (placeOrderState is PlaceOrderError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: ${placeOrderState.message}')),
+                );
+              }
+            },
+          ),
+        ],
         child: BlocConsumer<CartCubit, CartState>(
           listener: (context, cartState) {
             switch (cartState) {
@@ -175,7 +195,11 @@ class _CartPageState extends State<CartPage> {
                       ElevatedButton(
                         onPressed: (cartState is CartUpdatingAmount)
                             ? () {}
-                            : () {},
+                            : () {
+                                context.read<PlaceOrderCubit>().placeOrder(
+                                  cartState.cartItems,
+                                );
+                              },
                         child: (cartState is CartUpdatingAmount)
                             ? SizedBox(
                                 width: 16,
