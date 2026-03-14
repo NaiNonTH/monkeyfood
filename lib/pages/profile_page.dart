@@ -138,6 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   ListView(
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     children: [
                       ListTile(
@@ -162,85 +163,71 @@ class _ProfilePageState extends State<ProfilePage> {
                         title: const Text('Sign Out'),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
                         onTap: () async {
-                          await supabase.auth.signOut();
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              icon: Icon(Icons.warning),
+                              title: const Text(
+                                'Sign Out?',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              content: const Text(
+                                'Are you sure to log out? You will need to log in again next time you use the app.',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text('Log Out'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: ColorScheme.fromSeed(
+                                      seedColor: Colors.orange,
+                                    ).primary,
+                                    foregroundColor: ColorScheme.fromSeed(
+                                      seedColor: Colors.orange,
+                                    ).onPrimary,
+                                  ),
+                                  child: const Text('Stay Signed In'),
+                                ),
+                              ],
+                            ),
+                          );
 
-                          if (context.mounted) {
-                            context.go('/login');
+                          if (confirmed == true) {
+                            await supabase.auth.signOut();
+
+                            if (context.mounted) {
+                              context.go('/login');
+                            }
                           }
                         },
                       ),
                     ],
                   ),
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: TextButton(
-                  //         onPressed: () {},
-                  //         style: TextButton.styleFrom(
-                  //           shape: RoundedRectangleBorder(
-                  //             borderRadius: BorderRadiusGeometry.all(
-                  //               Radius.zero,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //         child: Column(
-                  //           children: [
-                  //             Icon(Icons.assignment, size: 32),
-                  //             SizedBox(height: 4),
-                  //             Text('Track My Order'),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(
-                  //     left: 16.0,
-                  //     right: 16.0,
-                  //     top: 16.0,
-                  //     bottom: 4.0,
-                  //   ),
-                  //   child: Text(
-                  //     'Account Settings',
-                  //     style: TextStyle(color: Colors.grey),
-                  //   ),
-                  // ),
-                  // ListView(
-                  //   shrinkWrap: true,
-                  //   children: [
-                  //     ListTile(
-                  //       title: const Text('Edit Restaurant Info'),
-                  //       trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                  //       onTap: () {},
-                  //     ),
-                  //     Divider(height: 1),
-                  //     ListTile(
-                  //       title: const Text('Manage Menus'),
-                  //       trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                  //       onTap: () {},
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             );
           case ProfileError():
-            return Column(
-              children: [
-                Text('Something went wrong: ${profileState.message}'),
-                ListTile(
-                  title: const Text('Sign Out'),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                  onTap: () async {
-                    await supabase.auth.signOut();
+            return Center(
+              child: Column(
+                children: [
+                  Text('Something went wrong: ${profileState.message}'),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await supabase.auth.signOut();
 
-                    if (context.mounted) {
-                      context.go('/login');
-                    }
-                  },
-                ),
-              ],
+                      if (context.mounted) {
+                        context.go('/login');
+                      }
+                    },
+                    child: const Text('Sign Out'),
+                  ),
+                ],
+              ),
             );
           default:
             return Center(child: CircularProgressIndicator());
