@@ -146,19 +146,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ListTile(
                         title: const Text('Edit Account Info'),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                        onTap: () {},
-                      ),
-                      Divider(height: 1),
-                      ListTile(
-                        title: const Text('Edit Location'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                        onTap: () {},
-                      ),
-                      Divider(height: 1),
-                      ListTile(
-                        title: const Text('Edit Payment Details'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                        onTap: () {},
+                        onTap: () {
+                          context.push('/profile/edit-account-info');
+                        },
                       ),
                       Divider(height: 1),
                       ListTile(

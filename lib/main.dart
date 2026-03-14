@@ -11,6 +11,7 @@ import 'package:monkeyfood/cubit/order_cubit.dart';
 import 'package:monkeyfood/cubit/place_order_cubit.dart';
 import 'package:monkeyfood/cubit/profile_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
+import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
 import 'package:monkeyfood/pages/profile/favorite_page.dart';
 import 'package:monkeyfood/pages/home/food_page.dart';
 import 'package:monkeyfood/pages/home/home_page.dart';
@@ -86,6 +87,10 @@ final _router = GoRouter(
                   builder: (_, _) => TrackMyOrderPage(),
                 ),
                 GoRoute(path: 'favorite', builder: (_, _) => FavoritePage()),
+                GoRoute(
+                  path: 'edit-account-info',
+                  builder: (_, _) => EditAccountInfoPage(),
+                ),
               ],
             ),
           ],
