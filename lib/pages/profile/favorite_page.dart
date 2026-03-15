@@ -43,7 +43,7 @@ class FavoritePage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '\$${state.favoriteItems[index].originalPrice}',
+                        '\$${state.favoriteItems[index].originalPrice.toStringAsFixed(2)}',
                         style: TextStyle(
                           fontSize: 16,
                           decoration: TextDecoration.lineThrough,
@@ -52,7 +52,7 @@ class FavoritePage extends StatelessWidget {
                       ),
                       SizedBox(width: 4),
                       Text(
-                        '\$${state.favoriteItems[index].price}',
+                        '\$${state.favoriteItems[index].price.toStringAsFixed(2)}',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class FavoritePage extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           context.read<FavoriteCubit>().removeFavoriteItem(
-                            state.favoriteItems[index],
+                            state.favoriteItems[index].id,
                           );
                         },
                         child: Icon(Icons.delete_outline, size: 20),

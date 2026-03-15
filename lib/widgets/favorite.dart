@@ -24,7 +24,7 @@ class FavoriteButton extends StatelessWidget {
             final cubit = context.read<FavoriteCubit>();
 
             if (isFavorite) {
-              cubit.removeFavoriteItem(food);
+              cubit.removeFavoriteItem(food.id);
             } else {
               cubit.addFavoriteItem(food);
             }

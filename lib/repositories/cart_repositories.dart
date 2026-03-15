@@ -17,12 +17,12 @@ class CartRepositories {
       final foodItem = value['foods'];
 
       final foodObj = Food(
+        id: foodItem['id'],
         title: foodItem['title'],
         description: foodItem['description'],
         price: foodItem['price'].toDouble(),
         originalPrice: foodItem['original_price'].toDouble(),
         imageName: foodItem['image_name'],
-        id: foodItem['id'],
       );
 
       return CartItem(foodObj, id: value['id'], amount: value['amount']);
