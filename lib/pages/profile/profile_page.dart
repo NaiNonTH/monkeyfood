@@ -88,7 +88,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Expanded(
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.push('/profile/to-rate');
+                          },
                           style: TextButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadiusGeometry.all(

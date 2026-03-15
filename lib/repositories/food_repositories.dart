@@ -49,4 +49,25 @@ class FoodRepositories {
       );
     }
   }
+
+  Future<List<Food>> getFoodsToRate() async {
+    final res = await supabase
+        .from('order_items')
+        .select('foods(*), orders(user_id)')
+        .eq('status', 'delivered')
+        .eq('orders.user_id', supabase.auth.currentUser!.id);
+
+    return res.map((orderItem) {
+      final food = orderItem['foods'];
+
+      return Food(
+        id: food['id'],
+        title: food['title'],
+        description: food['description'],
+        price: food['price'].toDouble(),
+        originalPrice: food['original_price'].toDouble(),
+        imageName: food['image_name'],
+      );
+    }).toList();
+  }
 }

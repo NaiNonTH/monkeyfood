@@ -17,6 +17,7 @@ import 'package:monkeyfood/pages/home/food_page.dart';
 import 'package:monkeyfood/pages/home/home_page.dart';
 import 'package:monkeyfood/pages/login_page.dart';
 import 'package:monkeyfood/pages/profile/profile_page.dart';
+import 'package:monkeyfood/pages/profile/to_rate_page.dart';
 import 'package:monkeyfood/pages/register_page.dart';
 import 'package:monkeyfood/pages/profile/track_my_order_page.dart';
 import 'package:monkeyfood/repositories/cart_repositories.dart';
@@ -105,6 +106,7 @@ final _router = GoRouter(
                   path: 'track-my-order',
                   builder: (_, _) => TrackMyOrderPage(),
                 ),
+                GoRoute(path: 'to-rate', builder: (_, _) => ToRatePage()),
                 GoRoute(path: 'favorite', builder: (_, _) => FavoritePage()),
                 GoRoute(
                   path: 'edit-account-info',
