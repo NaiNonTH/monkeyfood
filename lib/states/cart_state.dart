@@ -8,25 +8,9 @@ class CartLoading extends CartState {}
 
 class CartLoaded extends CartState {
   final List<CartItem> cartItems;
+  final bool isRefreshing;
 
-  CartLoaded({required this.cartItems});
-}
-
-class CartItemAdded extends CartState {}
-
-class CartUpdatingAmount extends CartState {}
-
-class CartItemUpdated extends CartState {
-  // final int id;
-  // final int amount;
-
-  // CartItemUpdated({required this.id, required this.amount});
-}
-
-class CartItemDeleted extends CartState {
-  final int id;
-
-  CartItemDeleted({required this.id});
+  CartLoaded({required this.cartItems, this.isRefreshing = false});
 }
 
 class CartError extends CartState {

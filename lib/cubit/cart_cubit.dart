@@ -19,37 +19,81 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
+  Future<void> refreshCartItems() async {
+    final current = state;
+
+    if (current is CartLoaded) {
+      emit(CartLoaded(cartItems: current.cartItems, isRefreshing: true));
+    }
+
+    try {
+      final cartItems = await _cartRepositories.getCartItems();
+
+      emit(CartLoaded(cartItems: cartItems));
+    } catch (e) {
+      emit(CartError(message: e.toString()));
+    }
+  }
+
   Future<void> incrementItemAmount(int cartId) async {
-    emit(CartUpdatingAmount());
+    final current = state as CartLoaded;
+
+    if (state is! CartLoaded) return;
+
+    current.cartItems
+        .where((cartItem) => cartItem.id == cartId)
+        .single
+        .incrementAmount();
+
+    emit(CartLoaded(cartItems: current.cartItems, isRefreshing: true));
 
     try {
       await _cartRepositories.incrementItemAmount(cartId);
 
-      emit(CartItemUpdated());
+      final cartItems = await _cartRepositories.getCartItems();
+
+      emit(CartLoaded(cartItems: cartItems));
     } catch (e) {
       emit(CartError(message: e.toString()));
     }
   }
 
-  Future<void> decrementItemAmount(int id) async {
-    emit(CartUpdatingAmount());
+  Future<void> decrementItemAmount(int cartId) async {
+    final current = state as CartLoaded;
+
+    if (state is! CartLoaded) return;
+
+    current.cartItems
+        .where((cartItem) => cartItem.id == cartId)
+        .single
+        .decrementAmount();
+
+    emit(CartLoaded(cartItems: current.cartItems, isRefreshing: true));
 
     try {
-      await _cartRepositories.decrementItemAmount(id);
+      await _cartRepositories.decrementItemAmount(cartId);
 
-      emit(CartItemUpdated());
+      final cartItems = await _cartRepositories.getCartItems();
+
+      emit(CartLoaded(cartItems: cartItems));
     } catch (e) {
       emit(CartError(message: e.toString()));
     }
   }
 
-  Future<void> removeCartItem(int id) async {
-    emit(CartLoading());
+  Future<void> removeCartItem(int cartId) async {
+    final current = state as CartLoaded;
+
+    if (state is! CartLoaded) return;
+
+    emit(CartLoaded(cartItems: current.cartItems, isRefreshing: true));
 
     try {
-      await _cartRepositories.removeFromCart(id);
+      await _cartRepositories.removeFromCart(cartId);
 
-      emit(CartItemDeleted(id: id));
+      final cartItems = await _cartRepositories.getCartItems();
+
+      emit(CartLoaded(cartItems: cartItems));
     } catch (e) {
       emit(CartError(message: e.toString()));
     }

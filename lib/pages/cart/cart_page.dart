@@ -28,7 +28,7 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<CartCubit>().loadCartItems();
+        context.read<CartCubit>().refreshCartItems();
       },
       child: MultiBlocListener(
         listeners: [
@@ -54,15 +54,7 @@ class _CartPageState extends State<CartPage> {
             },
           ),
         ],
-        child: BlocConsumer<CartCubit, CartState>(
-          listener: (context, cartState) {
-            switch (cartState) {
-              case CartItemUpdated():
-              case CartItemDeleted():
-                context.read<CartCubit>().loadCartItems();
-                break;
-            }
-          },
+        child: BlocBuilder<CartCubit, CartState>(
           builder: (context, cartState) {
             switch (cartState) {
               case CartLoaded():
@@ -239,14 +231,14 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
                         ElevatedButton(
-                          onPressed: (cartState is CartUpdatingAmount)
+                          onPressed: (cartState.isRefreshing)
                               ? () {}
                               : () {
                                   context.read<PlaceOrderCubit>().placeOrder(
                                     cartState.cartItems,
                                   );
                                 },
-                          child: (cartState is CartUpdatingAmount)
+                          child: (cartState.isRefreshing)
                               ? SizedBox(
                                   width: 16,
                                   height: 16,
