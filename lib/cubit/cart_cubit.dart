@@ -3,15 +3,15 @@ import 'package:monkeyfood/states/cart_state.dart';
 import 'package:monkeyfood/repositories/cart_repositories.dart';
 
 class CartCubit extends Cubit<CartState> {
-  final CartRepositories cartRepositories;
+  final CartRepositories _cartRepositories;
 
-  CartCubit(this.cartRepositories) : super(CartInit());
+  CartCubit(this._cartRepositories) : super(CartInit());
 
   Future<void> loadCartItems() async {
     emit(CartLoading());
 
     try {
-      final cartItems = await cartRepositories.getCartItems();
+      final cartItems = await _cartRepositories.getCartItems();
 
       emit(CartLoaded(cartItems: cartItems));
     } catch (e) {
@@ -23,7 +23,7 @@ class CartCubit extends Cubit<CartState> {
     emit(CartUpdatingAmount());
 
     try {
-      await cartRepositories.incrementItemAmount(cartId);
+      await _cartRepositories.incrementItemAmount(cartId);
 
       emit(CartItemUpdated());
     } catch (e) {
@@ -35,7 +35,7 @@ class CartCubit extends Cubit<CartState> {
     emit(CartUpdatingAmount());
 
     try {
-      await cartRepositories.decrementItemAmount(id);
+      await _cartRepositories.decrementItemAmount(id);
 
       emit(CartItemUpdated());
     } catch (e) {
@@ -47,7 +47,7 @@ class CartCubit extends Cubit<CartState> {
     emit(CartLoading());
 
     try {
-      await cartRepositories.removeFromCart(id);
+      await _cartRepositories.removeFromCart(id);
 
       emit(CartItemDeleted(id: id));
     } catch (e) {

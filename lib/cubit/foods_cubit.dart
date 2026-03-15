@@ -3,15 +3,15 @@ import 'package:monkeyfood/repositories/food_repositories.dart';
 import 'package:monkeyfood/states/foods_state.dart';
 
 class FoodsCubit extends Cubit<FoodsState> {
-  final FoodRepositories foodRepositories;
+  final FoodRepositories _foodRepositories;
 
-  FoodsCubit(this.foodRepositories) : super(FoodsInit());
+  FoodsCubit(this._foodRepositories) : super(FoodsInit());
 
   Future<void> loadFoodEntries() async {
     emit(FoodsLoading());
 
     try {
-      final foods = await foodRepositories.getFoodEntries();
+      final foods = await _foodRepositories.getFoodEntries();
 
       emit(FoodsLoaded(foods: foods));
     } catch (e) {

@@ -3,15 +3,15 @@ import 'package:monkeyfood/repositories/profile_repositories.dart';
 import 'package:monkeyfood/states/profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
-  final ProfileRepositories profileRepositories;
+  final ProfileRepositories _profileRepositories;
 
-  ProfileCubit(this.profileRepositories) : super(ProfileInit());
+  ProfileCubit(this._profileRepositories) : super(ProfileInit());
 
   Future<void> getUserProfile() async {
     emit(ProfileLoading());
 
     try {
-      final user = await profileRepositories.getUserProfile();
+      final user = await _profileRepositories.getUserProfile();
 
       if (user == null) {
         emit(ProfileError(message: 'User is not logged in.'));

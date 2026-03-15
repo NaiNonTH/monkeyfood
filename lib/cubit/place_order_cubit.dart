@@ -4,15 +4,15 @@ import 'package:monkeyfood/repositories/order_repositories.dart';
 import 'package:monkeyfood/states/place_order_state.dart';
 
 class PlaceOrderCubit extends Cubit<PlaceOrderState> {
-  final OrderRepositories orderRepositories;
+  final OrderRepositories _orderRepositories;
 
-  PlaceOrderCubit(this.orderRepositories) : super(PlaceOrderInit());
+  PlaceOrderCubit(this._orderRepositories) : super(PlaceOrderInit());
 
   Future<void> placeOrder(List<CartItem> cartItems) async {
     emit(PlacingOrder());
 
     try {
-      await orderRepositories.placeOrder(cartItems);
+      await _orderRepositories.placeOrder(cartItems);
 
       emit(OrderPlaced());
     } catch (e) {

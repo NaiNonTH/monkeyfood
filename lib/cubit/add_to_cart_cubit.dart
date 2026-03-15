@@ -4,15 +4,15 @@ import 'package:monkeyfood/states/add_to_cart_state.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AddToCartCubit extends Cubit<AddToCartState> {
-  final CartRepositories cartRepositories;
+  final CartRepositories _cartRepositories;
 
-  AddToCartCubit(this.cartRepositories) : super(AddToCartInit());
+  AddToCartCubit(this._cartRepositories) : super(AddToCartInit());
 
   Future<void> addCartItem(int foodId) async {
     emit(AddingToCart());
 
     try {
-      await cartRepositories.addToCart(foodId);
+      await _cartRepositories.addToCart(foodId);
 
       emit(AddedToCart());
     } on PostgrestException catch (e) {
