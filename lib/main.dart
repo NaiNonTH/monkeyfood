@@ -41,8 +41,24 @@ Future<void> main() async {
   runApp(const MainApp());
 }
 
+class SupabaseAuthNotifier extends ChangeNotifier {
+  SupabaseAuthNotifier() {
+    Supabase.instance.client.auth.onAuthStateChange.listen(
+      (_) {
+        notifyListeners();
+      },
+      onError: (error, stackTrace) {
+        notifyListeners();
+      },
+    );
+  }
+}
+
+final _authNotifier = SupabaseAuthNotifier();
+
 final _router = GoRouter(
   initialLocation: '/',
+  refreshListenable: _authNotifier,
   redirect: (context, state) {
     final isLoggedIn = supabase.auth.currentSession != null;
     final isOnAuth = ['/login', '/register'].contains(state.matchedLocation);

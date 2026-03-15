@@ -10,32 +10,48 @@ class CartCubit extends Cubit<CartState> {
   Future<void> loadCartItems() async {
     emit(CartLoading());
 
-    final cartItems = await cartRepositories.getCartItems();
+    try {
+      final cartItems = await cartRepositories.getCartItems();
 
-    emit(CartLoaded(cartItems: cartItems));
+      emit(CartLoaded(cartItems: cartItems));
+    } catch (e) {
+      emit(CartError(message: e.toString()));
+    }
   }
 
   Future<void> incrementItemAmount(int cartId) async {
     emit(CartUpdatingAmount());
 
-    await cartRepositories.incrementItemAmount(cartId);
+    try {
+      await cartRepositories.incrementItemAmount(cartId);
 
-    emit(CartItemUpdated());
+      emit(CartItemUpdated());
+    } catch (e) {
+      emit(CartError(message: e.toString()));
+    }
   }
 
   Future<void> decrementItemAmount(int id) async {
     emit(CartUpdatingAmount());
 
-    await cartRepositories.decrementItemAmount(id);
+    try {
+      await cartRepositories.decrementItemAmount(id);
 
-    emit(CartItemUpdated());
+      emit(CartItemUpdated());
+    } catch (e) {
+      emit(CartError(message: e.toString()));
+    }
   }
 
   Future<void> removeCartItem(int id) async {
     emit(CartLoading());
 
-    await cartRepositories.removeFromCart(id);
+    try {
+      await cartRepositories.removeFromCart(id);
 
-    emit(CartItemDeleted(id: id));
+      emit(CartItemDeleted(id: id));
+    } catch (e) {
+      emit(CartError(message: e.toString()));
+    }
   }
 }

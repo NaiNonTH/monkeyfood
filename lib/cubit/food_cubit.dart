@@ -10,8 +10,12 @@ class FoodCubit extends Cubit<FoodState> {
   Future<void> loadFoodById(int id) async {
     emit(FoodLoading());
 
-    final food = await foodRepositories.getFoodById(id);
+    try {
+      final food = await foodRepositories.getFoodById(id);
 
-    emit(FoodLoaded(food: food));
+      emit(FoodLoaded(food: food));
+    } catch (e) {
+      emit(FoodError(message: e.toString()));
+    }
   }
 }

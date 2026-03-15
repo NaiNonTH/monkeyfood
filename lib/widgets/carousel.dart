@@ -23,6 +23,8 @@ class _CarouselState extends State<Carousel> {
               'http://picsum.photos/800/450?random=$index',
               fit: BoxFit.cover,
               width: double.infinity,
+              errorBuilder: (context, error, stackTrace) =>
+                  Center(child: Icon(Icons.error_outline)),
             ),
           ),
         ),
