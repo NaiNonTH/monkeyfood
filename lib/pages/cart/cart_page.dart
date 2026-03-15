@@ -7,6 +7,7 @@ import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/add_to_cart_state.dart';
 import 'package:monkeyfood/states/cart_state.dart';
 import 'package:monkeyfood/states/place_order_state.dart';
+import 'package:monkeyfood/widgets/show_error.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -260,9 +261,7 @@ class _CartPageState extends State<CartPage> {
                   ),
                 );
               case CartError():
-                return Center(
-                  child: Text('Something went wrong: ${cartState.message}'),
-                );
+                return ShowError(message: cartState.message);
               default:
                 return Center(child: CircularProgressIndicator());
             }

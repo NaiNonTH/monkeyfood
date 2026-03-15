@@ -9,6 +9,7 @@ import 'package:monkeyfood/states/food_state.dart';
 import 'package:monkeyfood/states/foods_state.dart';
 import 'package:monkeyfood/widgets/favorite.dart';
 import 'package:monkeyfood/widgets/food_card_grid.dart';
+import 'package:monkeyfood/widgets/show_error.dart';
 
 class FoodPage extends StatefulWidget {
   final int id;
@@ -206,9 +207,7 @@ class _FoodPageState extends State<FoodPage> {
                   ),
                 );
               case FoodError():
-                return Center(
-                  child: Text('Something went wrong: ${foodState.message}'),
-                );
+                return ShowError(message: foodState.message);
               default:
                 return Center(child: CircularProgressIndicator());
             }

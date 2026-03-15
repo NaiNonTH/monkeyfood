@@ -7,6 +7,7 @@ import 'package:monkeyfood/states/foods_state.dart';
 import 'package:monkeyfood/widgets/carousel.dart';
 import 'package:monkeyfood/widgets/food_card_grid.dart';
 import 'package:monkeyfood/widgets/main_app_bar.dart';
+import 'package:monkeyfood/widgets/show_error.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -44,11 +45,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     case FoodsLoaded():
                       return FoodCardGrid(foods: foodState.foods);
                     case FoodsError():
-                      return Center(
-                        child: Text(
-                          'Something went wrong: ${foodState.message}',
-                        ),
-                      );
+                      return ShowError(message: foodState.message);
                     default:
                       return Center(
                         child: Container(

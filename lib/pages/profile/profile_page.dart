@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkeyfood/widgets/show_error.dart';
 import 'package:monkeyfood/cubit/profile_cubit.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
 import 'package:monkeyfood/states/profile_state.dart';
@@ -204,23 +205,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             );
           case ProfileError():
-            return Center(
-              child: Column(
-                children: [
-                  Text('Something went wrong: ${profileState.message}'),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await supabase.auth.signOut();
-
-                      if (context.mounted) {
-                        context.go('/login');
-                      }
-                    },
-                    child: const Text('Sign Out'),
-                  ),
-                ],
-              ),
-            );
+            return ShowError(message: profileState.message);
           default:
             return Center(child: CircularProgressIndicator());
         }

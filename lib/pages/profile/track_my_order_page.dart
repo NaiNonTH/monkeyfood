@@ -4,6 +4,7 @@ import 'package:monkeyfood/cubit/order_cubit.dart';
 import 'package:monkeyfood/models/order.dart';
 import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/order_state.dart';
+import 'package:monkeyfood/widgets/show_error.dart';
 
 class TrackMyOrderPage extends StatefulWidget {
   const TrackMyOrderPage({super.key});
@@ -152,9 +153,7 @@ class _TrackMyOrderPageState extends State<TrackMyOrderPage> {
                         .toList(),
                   );
                 case OrderError():
-                  return Center(
-                    child: Text('Something went wrong: ${orderState.message}'),
-                  );
+                  return ShowError(message: orderState.message);
                 default:
                   return Center(child: CircularProgressIndicator());
               }
