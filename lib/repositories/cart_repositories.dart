@@ -10,7 +10,8 @@ class CartRepositories {
           *,
           foods!inner ( * )
         ''')
-        .eq('user_id', supabase.auth.currentUser!.id);
+        .eq('user_id', supabase.auth.currentUser!.id)
+        .order('created_at', ascending: true);
 
     return res.map((value) {
       final foodItem = value['foods'];

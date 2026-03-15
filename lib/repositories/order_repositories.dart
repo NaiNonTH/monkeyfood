@@ -11,7 +11,8 @@ class OrderRepositories {
           *,
           order_items(*, foods(*))
         ''')
-        .eq('user_id', supabase.auth.currentUser!.id);
+        .eq('user_id', supabase.auth.currentUser!.id)
+        .order('created_at', ascending: false);
 
     return res.map((order) {
       final orderItems = (order['order_items'] as List)
@@ -37,6 +38,7 @@ class OrderRepositories {
         id: order['id'],
         items: orderItems,
         totalPrice: order['total_price'].toDouble(),
+        orderDate: DateTime.parse(order['created_at']),
       );
     }).toList();
   }

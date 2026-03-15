@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_file.dart';
 import 'package:monkeyfood/cubit/add_to_cart_cubit.dart';
 import 'package:monkeyfood/cubit/cart_cubit.dart';
 import 'package:monkeyfood/cubit/favorite_cubit.dart';

@@ -6,8 +6,14 @@ class Order {
   final int id;
   final List<OrderItem> items;
   final double totalPrice;
+  final DateTime orderDate;
 
-  Order({required this.id, required this.items, required this.totalPrice});
+  Order({
+    required this.id,
+    required this.items,
+    required this.totalPrice,
+    required this.orderDate,
+  });
 }
 
 class OrderItem {

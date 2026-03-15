@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:humanize/humanize.dart';
 import 'package:monkeyfood/cubit/order_cubit.dart';
 import 'package:monkeyfood/models/order.dart';
 import 'package:monkeyfood/services/image_service.dart';
@@ -48,7 +49,21 @@ class _TrackMyOrderPageState extends State<TrackMyOrderPage> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text('Order ID: ${order.id}'),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Order ID: ${order.id}'),
+                                    Text(
+                                      order.orderDate
+                                                  .difference(DateTime.now())
+                                                  .inDays <=
+                                              -1
+                                          ? '${order.orderDate.day}/${order.orderDate.month}/${order.orderDate.year}, ${order.orderDate.hour}:${order.orderDate.minute}'
+                                          : naturaltime(order.orderDate),
+                                    ),
+                                  ],
+                                ),
                               ),
                               SizedBox(height: 4),
                               ListView.builder(
