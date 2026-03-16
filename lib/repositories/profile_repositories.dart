@@ -17,4 +17,15 @@ class ProfileRepositories {
       location: res['location'],
     );
   }
+
+  Future<void> updateUserProfile(Profile profile) async {
+    await supabase
+        .from('profiles')
+        .update({
+          'display_name': profile.displayName,
+          'tel': profile.tel,
+          'location': profile.location,
+        })
+        .eq('id', supabase.auth.currentUser!.id);
+  }
 }

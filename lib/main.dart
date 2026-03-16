@@ -12,6 +12,7 @@ import 'package:monkeyfood/cubit/order_cubit.dart';
 import 'package:monkeyfood/cubit/place_order_cubit.dart';
 import 'package:monkeyfood/cubit/profile_cubit.dart';
 import 'package:monkeyfood/cubit/rating_cubit.dart';
+import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
 import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
 import 'package:monkeyfood/pages/profile/favorite_page.dart';
@@ -134,6 +135,9 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => ProfileCubit(ProfileRepositories())),
+        BlocProvider(
+          create: (context) => UpdateProfileCubit(ProfileRepositories()),
+        ),
         BlocProvider(create: (context) => FoodCubit(FoodRepositories())),
         BlocProvider(create: (context) => FoodsCubit(FoodRepositories())),
         BlocProvider(create: (context) => CartCubit(CartRepositories())),
