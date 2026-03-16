@@ -5,7 +5,6 @@ class Food {
   final int id;
   final double originalPrice;
   final double price;
-  final double rating;
 
   Food({
     required this.id,
@@ -14,7 +13,6 @@ class Food {
     required this.price,
     required this.originalPrice,
     required this.imageName,
-    this.rating = 5.00,
   });
 
   Food copyWith({
@@ -27,6 +25,40 @@ class Food {
     double? rating,
   }) {
     return Food(
+      title: title ?? this.title,
+      description: description ?? this.description,
+      imageName: imageName ?? this.imageName,
+      id: id ?? this.id,
+      originalPrice: originalPrice ?? this.originalPrice,
+      price: price ?? this.price,
+    );
+  }
+}
+
+class FoodWithAvgRating extends Food {
+  final double rating;
+
+  FoodWithAvgRating({
+    required super.id,
+    required super.title,
+    required super.description,
+    required super.price,
+    required super.originalPrice,
+    required super.imageName,
+    required this.rating,
+  });
+
+  @override
+  FoodWithAvgRating copyWith({
+    String? title,
+    String? description,
+    String? imageName,
+    int? id,
+    double? originalPrice,
+    double? price,
+    double? rating,
+  }) {
+    return FoodWithAvgRating(
       title: title ?? this.title,
       description: description ?? this.description,
       imageName: imageName ?? this.imageName,

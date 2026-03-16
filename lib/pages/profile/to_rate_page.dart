@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:monkeyfood/models/food.dart';
-import 'package:monkeyfood/repositories/food_repositories.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:monkeyfood/cubit/add_rating_cubit.dart';
+import 'package:monkeyfood/cubit/rating_cubit.dart';
+import 'package:monkeyfood/pages/profile/rating_page.dart';
 import 'package:monkeyfood/services/image_service.dart';
+import 'package:monkeyfood/states/add_rating_state.dart';
+import 'package:monkeyfood/states/rating_state.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 
 class ToRatePage extends StatefulWidget {
@@ -12,59 +16,89 @@ class ToRatePage extends StatefulWidget {
 }
 
 class _ToRatePageState extends State<ToRatePage> {
-  static final FoodRepositories _foodRepositories = FoodRepositories();
-  Future<List<Food>> _futureResult = _foodRepositories.getFoodsToRate();
+  @override
+  void initState() {
+    super.initState();
+    context.read<RatingCubit>().getFoodsToRate();
+  }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        final newResult = await _foodRepositories.getFoodsToRate();
-
-        setState(() {
-          _futureResult = Future.value(newResult);
-        });
+        context.read<RatingCubit>().refreshFoodsToRate();
       },
-      child: FutureBuilder(
-        future: _futureResult,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+      child: BlocListener<AddRatingCubit, AddRatingState>(
+        listener: (context, addRatingState) {
+          if (addRatingState is AddedRating) {
+            context.read<RatingCubit>().refreshFoodsToRate();
           }
-
-          if (snapshot.hasError) {
-            return ShowError(message: snapshot.error.toString());
-          }
-
-          return ListView.separated(
-            separatorBuilder: (context, index) => Divider(height: 1),
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) => ListTile(
-              leading: SizedBox(
-                width: 100,
-                height: 72,
-                child: Image.network(
-                  FoodImageService.instance.url(
-                        snapshot.data![index].imageName,
-                      ) ??
-                      '',
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      Center(child: Icon(Icons.error_outline)),
-                ),
-              ),
-              contentPadding: EdgeInsets.all(0),
-              title: Text(
-                snapshot.data![index].title,
-                style: TextStyle(fontSize: 16),
-              ),
-              trailing: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: const Icon(Icons.arrow_forward_ios, size: 14),
-              ),
-            ),
-          );
         },
+        child: BlocBuilder<RatingCubit, RatingState>(
+          builder: (context, ratingState) {
+            switch (ratingState) {
+              case RatingLoaded():
+                if (ratingState.foods.isEmpty) {
+                  return SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight:
+                            MediaQuery.of(context).size.height -
+                            kToolbarHeight * 2 -
+                            kBottomNavigationBarHeight * 2,
+                      ),
+                      child: Center(child: const Text('No food to rate!')),
+                    ),
+                  );
+                }
+
+                return ListView.separated(
+                  separatorBuilder: (context, index) => Divider(height: 1),
+                  itemCount: ratingState.foods.length,
+                  itemBuilder: (context, index) => ListTile(
+                    leading: SizedBox(
+                      width: 100,
+                      height: 72,
+                      child: Image.network(
+                        FoodImageService.instance.url(
+                              ratingState.foods[index].imageName,
+                            ) ??
+                            '',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            Center(child: Icon(Icons.error_outline)),
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(0),
+                    title: Text(
+                      ratingState.foods[index].title,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    trailing: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: const Icon(Icons.arrow_forward_ios, size: 14),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RatingPage(
+                            foodId: ratingState.foods[index].id,
+                            foodTitle: ratingState.foods[index].title,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              case RatingError():
+                return ShowError(message: ratingState.message);
+              default:
+                return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
     );
   }

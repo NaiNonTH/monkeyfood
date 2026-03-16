@@ -2,72 +2,42 @@ import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
 
 class FoodRepositories {
-  Future<List<Food>> getFoodEntries() async {
-    try {
-      final res = await supabase
-          .from('foods')
-          .select()
-          .order('id', ascending: true);
-
-      return res
-          .map(
-            (value) => Food(
-              id: value['id'],
-              title: value['title'],
-              description: value['description'],
-              price: value['price'].toDouble(),
-              originalPrice: value['original_price'].toDouble(),
-              imageName: value['image_name'],
-            ),
-          )
-          .toList();
-    } catch (e) {
-      return [];
-    }
-  }
-
-  Future<Food> getFoodById(int id) async {
-    try {
-      final res = await supabase.from('foods').select().eq('id', id).single();
-
-      return Food(
-        title: res['title'],
-        description: res['description'],
-        price: res['price'].toDouble(),
-        originalPrice: res['original_price'].toDouble(),
-        imageName: res['image_name'],
-        id: res['id'],
-      );
-    } catch (e) {
-      return Food(
-        id: id,
-        title: 'No Food',
-        description: 'ERROR ERROR!',
-        price: 0.00,
-        originalPrice: 0.00,
-        imageName: '',
-      );
-    }
-  }
-
-  Future<List<Food>> getFoodsToRate() async {
+  Future<List<FoodWithAvgRating>> getFoodEntries() async {
     final res = await supabase
-        .from('order_items')
-        .select('foods(*), orders(user_id)')
-        .eq('status', 'delivered')
-        .eq('orders.user_id', supabase.auth.currentUser!.id);
+        .from('foods_with_avg_rating')
+        .select()
+        .order('id', ascending: true);
 
-    return res.map((orderItem) {
-      final food = orderItem['foods'];
+    return res
+        .map(
+          (value) => FoodWithAvgRating(
+            id: value['id'],
+            title: value['title'],
+            description: value['description'],
+            price: value['price'].toDouble(),
+            originalPrice: value['original_price'].toDouble(),
+            imageName: value['image_name'],
+            rating: value['avg_rating'].toDouble(),
+          ),
+        )
+        .toList();
+  }
 
-      return Food(
-        id: food['id'],
-        title: food['title'],
-        description: food['description'],
-        price: food['price'].toDouble(),
-        originalPrice: food['original_price'].toDouble(),
-        imageName: food['image_name'],
-      );
-    }).toList();
+  Future<FoodWithAvgRating> getFoodById(int id) async {
+    final res = await supabase
+        .from('foods_with_avg_rating')
+        .select()
+        .eq('id', id)
+        .single();
+
+    return FoodWithAvgRating(
+      id: res['id'],
+      title: res['title'],
+      description: res['description'],
+      price: res['price'].toDouble(),
+      originalPrice: res['original_price'].toDouble(),
+      imageName: res['image_name'],
+      rating: res['avg_rating'].toDouble(),
+    );
   }
 }

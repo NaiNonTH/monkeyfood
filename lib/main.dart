@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkeyfood/cubit/add_rating_cubit.dart';
 import 'package:monkeyfood/cubit/add_to_cart_cubit.dart';
 import 'package:monkeyfood/cubit/cart_cubit.dart';
 import 'package:monkeyfood/cubit/favorite_cubit.dart';
@@ -10,6 +11,7 @@ import 'package:monkeyfood/cubit/foods_cubit.dart';
 import 'package:monkeyfood/cubit/order_cubit.dart';
 import 'package:monkeyfood/cubit/place_order_cubit.dart';
 import 'package:monkeyfood/cubit/profile_cubit.dart';
+import 'package:monkeyfood/cubit/rating_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
 import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
 import 'package:monkeyfood/pages/profile/favorite_page.dart';
@@ -25,6 +27,7 @@ import 'package:monkeyfood/repositories/favorite_repositories.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
 import 'package:monkeyfood/repositories/order_repositories.dart';
 import 'package:monkeyfood/repositories/profile_repositories.dart';
+import 'package:monkeyfood/repositories/rating_repositories.dart';
 import 'package:monkeyfood/services/preference_service.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
 import 'package:monkeyfood/widgets/scaffold.dart';
@@ -137,6 +140,8 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => AddToCartCubit(CartRepositories())),
         BlocProvider(create: (context) => OrderCubit(OrderRepositories())),
         BlocProvider(create: (context) => PlaceOrderCubit(OrderRepositories())),
+        BlocProvider(create: (context) => RatingCubit(RatingRepositories())),
+        BlocProvider(create: (context) => AddRatingCubit(RatingRepositories())),
         BlocProvider(
           create: (context) => FavoriteCubit(FavoriteRepositories()),
         ),

@@ -6,7 +6,7 @@ import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/widgets/food_card.dart';
 
 class FoodCardGrid extends StatefulWidget {
-  final List<Food> foods;
+  final List<FoodWithAvgRating> foods;
 
   const FoodCardGrid({super.key, required this.foods});
 
@@ -28,7 +28,7 @@ class _FoodCardGridState extends State<FoodCardGrid> {
       ),
       itemCount: widget.foods.length,
       itemBuilder: (context, index) {
-        Food food = widget.foods[index];
+        final food = widget.foods[index];
         return GestureDetector(
           onTap: () {
             context.push('/food/${food.id}');
