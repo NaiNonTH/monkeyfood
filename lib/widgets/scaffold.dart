@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:monkeyfood/widgets/main_app_bar.dart';
 
 class SharedScaffold extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -15,7 +14,6 @@ class _SharedScaffoldState extends State<SharedScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const GlobalAppBar(),
       body: widget.navigationShell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: widget.navigationShell.currentIndex,

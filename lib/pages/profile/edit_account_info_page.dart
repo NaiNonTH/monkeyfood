@@ -22,40 +22,43 @@ class _EditAccountInfoPageState extends State<EditAccountInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, profileState) {
-        if (profileState is ProfileLoaded) {
-          _displayNameController.text = profileState.user.displayName;
-          _phoneController.text = profileState.user.tel;
-          _locationController.text = profileState.user.location;
+    return Scaffold(
+      appBar: AppBar(title: const Text('Edit Your Info')),
+      body: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, profileState) {
+          if (profileState is ProfileLoaded) {
+            _displayNameController.text = profileState.user.displayName;
+            _phoneController.text = profileState.user.tel;
+            _locationController.text = profileState.user.location;
 
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Form(
-                  child: Column(
-                    children: [
-                      _buildTextField('Display Name', _displayNameController),
-                      SizedBox(height: 16.0),
-                      _buildTextField('Phone Number', _phoneController),
-                      SizedBox(height: 16.0),
-                      _buildTextField('Location', _locationController),
-                      SizedBox(height: 16.0),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('Submit Profile Edits'),
-                      ),
-                    ],
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Form(
+                    child: Column(
+                      children: [
+                        _buildTextField('Display Name', _displayNameController),
+                        SizedBox(height: 16.0),
+                        _buildTextField('Phone Number', _phoneController),
+                        SizedBox(height: 16.0),
+                        _buildTextField('Location', _locationController),
+                        SizedBox(height: 16.0),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Text('Submit Profile Edits'),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
+                ],
+              ),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 

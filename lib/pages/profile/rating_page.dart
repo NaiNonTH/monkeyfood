@@ -19,92 +19,95 @@ class _RatingPageState extends State<RatingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("You're rating"),
-          Text(
-            widget.foodTitle,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 16),
-          Column(
-            children: [
-              RadioGroup<int>(
-                groupValue: _ratingScore,
-                onChanged: (int? value) {
-                  setState(() {
-                    _ratingScore = value;
-                  });
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(children: [Radio<int>(value: 1), const Text('1')]),
-                    Column(children: [Radio<int>(value: 2), const Text('2')]),
-                    Column(children: [Radio<int>(value: 3), const Text('3')]),
-                    Column(children: [Radio<int>(value: 4), const Text('4')]),
-                    Column(children: [Radio<int>(value: 5), const Text('5')]),
-                  ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Rate')),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("You're rating"),
+            Text(
+              widget.foodTitle,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            Column(
+              children: [
+                RadioGroup<int>(
+                  groupValue: _ratingScore,
+                  onChanged: (int? value) {
+                    setState(() {
+                      _ratingScore = value;
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(children: [Radio<int>(value: 1), const Text('1')]),
+                      Column(children: [Radio<int>(value: 2), const Text('2')]),
+                      Column(children: [Radio<int>(value: 3), const Text('3')]),
+                      Column(children: [Radio<int>(value: 4), const Text('4')]),
+                      Column(children: [Radio<int>(value: 5), const Text('5')]),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 32),
-              TextField(
-                controller: _commentController,
-                maxLines: null,
-                decoration: InputDecoration(
-                  labelText: 'Add some comment',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 32),
+                TextField(
+                  controller: _commentController,
+                  maxLines: null,
+                  decoration: InputDecoration(
+                    labelText: 'Add some comment',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              SizedBox(height: 32),
-              BlocConsumer<AddRatingCubit, AddRatingState>(
-                listener: (context, addRatingState) {
-                  if (addRatingState is AddRatingError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(addRatingState.message)),
-                    );
-                  } else if (addRatingState is AddedRating) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${widget.foodTitle} rated!')),
-                    );
-                    Navigator.pop(context);
-                  }
-                },
-                builder: (context, addRatingState) => ElevatedButton(
-                  onPressed: (addRatingState is AddingRating)
-                      ? () {}
-                      : () {
-                          if (_ratingScore != null) {
-                            context.read<AddRatingCubit>().rate(
-                              foodId: widget.foodId,
-                              ratingScore: _ratingScore!,
-                              comment: _commentController.text,
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Please give a rating score first.',
+                SizedBox(height: 32),
+                BlocConsumer<AddRatingCubit, AddRatingState>(
+                  listener: (context, addRatingState) {
+                    if (addRatingState is AddRatingError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(addRatingState.message)),
+                      );
+                    } else if (addRatingState is AddedRating) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('${widget.foodTitle} rated!')),
+                      );
+                      Navigator.pop(context);
+                    }
+                  },
+                  builder: (context, addRatingState) => ElevatedButton(
+                    onPressed: (addRatingState is AddingRating)
+                        ? () {}
+                        : () {
+                            if (_ratingScore != null) {
+                              context.read<AddRatingCubit>().rate(
+                                foodId: widget.foodId,
+                                ratingScore: _ratingScore!,
+                                comment: _commentController.text,
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Please give a rating score first.',
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                        },
-                  child: (addRatingState is AddingRating)
-                      ? SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text('Place Order'),
+                              );
+                            }
+                          },
+                    child: (addRatingState is AddingRating)
+                        ? SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Text('Place Order'),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
