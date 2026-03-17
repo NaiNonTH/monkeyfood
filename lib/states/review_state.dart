@@ -8,8 +8,9 @@ class LoadingReview extends ReviewState {}
 
 class ReviewLoaded extends ReviewState {
   final List<Review> reviews;
+  final bool isRefreshing;
 
-  ReviewLoaded({required this.reviews});
+  ReviewLoaded({required this.reviews, this.isRefreshing = false});
 }
 
 class ReviewError extends ReviewState {

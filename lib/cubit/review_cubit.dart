@@ -18,4 +18,20 @@ class ReviewCubit extends Cubit<ReviewState> {
       emit(ReviewError(message: e.toString()));
     }
   }
+
+  Future<void> refreshReviews(int foodId) async {
+    final current = state;
+
+    if (current is ReviewLoaded) {
+      emit(ReviewLoaded(reviews: current.reviews, isRefreshing: true));
+    }
+
+    try {
+      final reviews = await _ratingRepositories.getReviews(foodId);
+
+      emit(ReviewLoaded(reviews: reviews));
+    } catch (e) {
+      emit(ReviewError(message: e.toString()));
+    }
+  }
 }
