@@ -17,6 +17,8 @@ import 'package:monkeyfood/cubit/review_cubit.dart';
 import 'package:monkeyfood/cubit/search_cubit.dart';
 import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
+import 'package:monkeyfood/pages/profile/restaurant/add_menu_page.dart';
+import 'package:monkeyfood/pages/profile/restaurant/edit_menu_page.dart';
 import 'package:monkeyfood/pages/review_page.dart';
 import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
 import 'package:monkeyfood/pages/profile/favorite_page.dart';
@@ -24,6 +26,7 @@ import 'package:monkeyfood/pages/food_page.dart';
 import 'package:monkeyfood/pages/home/home_page.dart';
 import 'package:monkeyfood/pages/login_page.dart';
 import 'package:monkeyfood/pages/profile/profile_page.dart';
+import 'package:monkeyfood/pages/profile/restaurant/manage_menus_page.dart';
 import 'package:monkeyfood/pages/profile/to_rate_page.dart';
 import 'package:monkeyfood/pages/register_page.dart';
 import 'package:monkeyfood/pages/profile/track_my_order_page.dart';
@@ -110,6 +113,27 @@ final _router = GoRouter(
                 GoRoute(
                   path: 'edit-account-info',
                   builder: (_, _) => EditAccountInfoPage(),
+                ),
+                GoRoute(
+                  path: 'restaurant',
+                  redirect: (context, state) {
+                    return;
+                  },
+                  routes: [
+                    GoRoute(
+                      path: 'manage-menus',
+                      builder: (_, _) => ManageMenusPage(),
+                      routes: [
+                        GoRoute(path: 'add', builder: (_, _) => AddMenuPage()),
+                        GoRoute(
+                          path: 'edit/:id',
+                          builder: (context, state) => EditMenuPage(
+                            id: int.parse(state.pathParameters['id']!),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
