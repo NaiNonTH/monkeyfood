@@ -14,18 +14,20 @@ import 'package:monkeyfood/cubit/place_order_cubit.dart';
 import 'package:monkeyfood/cubit/profile_cubit.dart';
 import 'package:monkeyfood/cubit/rating_cubit.dart';
 import 'package:monkeyfood/cubit/review_cubit.dart';
+import 'package:monkeyfood/cubit/search_cubit.dart';
 import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
 import 'package:monkeyfood/pages/home/review_page.dart';
 import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
 import 'package:monkeyfood/pages/profile/favorite_page.dart';
-import 'package:monkeyfood/pages/home/food_page.dart';
+import 'package:monkeyfood/pages/food_page.dart';
 import 'package:monkeyfood/pages/home/home_page.dart';
 import 'package:monkeyfood/pages/login_page.dart';
 import 'package:monkeyfood/pages/profile/profile_page.dart';
 import 'package:monkeyfood/pages/profile/to_rate_page.dart';
 import 'package:monkeyfood/pages/register_page.dart';
 import 'package:monkeyfood/pages/profile/track_my_order_page.dart';
+import 'package:monkeyfood/pages/search_page.dart';
 import 'package:monkeyfood/repositories/cart_repositories.dart';
 import 'package:monkeyfood/repositories/favorite_repositories.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
@@ -66,9 +68,11 @@ class SupabaseAuthNotifier extends ChangeNotifier {
 }
 
 final _authNotifier = SupabaseAuthNotifier();
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final _router = GoRouter(
   initialLocation: '/',
+  navigatorKey: _rootNavigatorKey,
   refreshListenable: _authNotifier,
   redirect: (context, state) {
     final isLoggedIn = supabase.auth.currentSession != null;
@@ -86,27 +90,7 @@ final _router = GoRouter(
           SharedScaffold(navigationShell: navigationShell),
       branches: [
         StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/',
-              builder: (_, _) => HomePage(),
-              routes: [
-                GoRoute(
-                  path: 'food/:id',
-                  builder: (_, state) =>
-                      FoodPage(id: int.parse(state.pathParameters['id']!)),
-                  routes: [
-                    GoRoute(
-                      path: 'reviews',
-                      builder: (context, state) => ReviewPage(
-                        id: int.parse(state.pathParameters['id']!),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+          routes: [GoRoute(path: '/', builder: (_, _) => HomePage())],
         ),
         StatefulShellBranch(
           routes: [GoRoute(path: '/cart', builder: (_, _) => CartPage())],
@@ -130,6 +114,25 @@ final _router = GoRouter(
               ],
             ),
           ],
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/search',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (_, _) => SearchPage(),
+    ),
+    GoRoute(
+      path: '/food/:id',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (_, state) =>
+          FoodPage(id: int.parse(state.pathParameters['id']!)),
+      routes: [
+        GoRoute(
+          path: 'reviews',
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) =>
+              ReviewPage(id: int.parse(state.pathParameters['id']!)),
         ),
       ],
     ),
@@ -158,6 +161,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => RatingCubit(RatingRepositories())),
         BlocProvider(create: (context) => AddRatingCubit(RatingRepositories())),
         BlocProvider(create: (context) => ReviewCubit(RatingRepositories())),
+        BlocProvider(create: (context) => SearchCubit(FoodRepositories())),
         BlocProvider(
           create: (context) => FavoriteCubit(FavoriteRepositories()),
         ),

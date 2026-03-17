@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   const GlobalAppBar({super.key});
@@ -17,7 +18,14 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
         'MonkeyFood',
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
-      actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+      actions: [
+        IconButton(
+          onPressed: () {
+            context.push('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 }

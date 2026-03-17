@@ -31,6 +31,34 @@ class FoodRepositories {
         .toList();
   }
 
+  Future<List<FoodWithAvgRating>> searchFoodEntries(String query) async {
+    final res = await supabase
+        .from('foods_with_avg_rating')
+        .select()
+        .ilike('title', '%$query%');
+
+    return res
+        .map(
+          (value) => FoodWithAvgRating(
+            id: value['id'],
+            title: value['title'],
+            description: value['description'],
+            price: value['price'].toDouble(),
+            originalPrice: value['original_price'].toDouble(),
+            imageName: value['image_name'],
+            rating: value['avg_rating'].toDouble(),
+            latestReview: (value['latest_rating'] == null)
+                ? null
+                : Review(
+                    displayName: value['latest_reviewer'],
+                    rating: value['latest_rating'],
+                    comment: value['latest_comment'],
+                  ),
+          ),
+        )
+        .toList();
+  }
+
   Future<FoodWithAvgRating> getFoodById(int id) async {
     final res = await supabase
         .from('foods_with_avg_rating')

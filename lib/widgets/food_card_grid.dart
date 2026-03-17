@@ -7,8 +7,9 @@ import 'package:monkeyfood/widgets/food_card.dart';
 
 class FoodCardGrid extends StatefulWidget {
   final List<FoodWithAvgRating> foods;
+  final bool fromSearch;
 
-  const FoodCardGrid({super.key, required this.foods});
+  const FoodCardGrid({super.key, required this.foods, this.fromSearch = false});
 
   @override
   State<FoodCardGrid> createState() => _FoodCardGridState();
@@ -31,7 +32,11 @@ class _FoodCardGridState extends State<FoodCardGrid> {
         final food = widget.foods[index];
         return GestureDetector(
           onTap: () {
-            context.push('/food/${food.id}');
+            if (widget.fromSearch) {
+              context.go('/food/${food.id}');
+            } else {
+              context.push('/food/${food.id}');
+            }
           },
           child: FoodCard(food: food),
         );
