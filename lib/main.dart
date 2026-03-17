@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkeyfood/config.dart';
 import 'package:monkeyfood/cubit/add_rating_cubit.dart';
 import 'package:monkeyfood/cubit/add_to_cart_cubit.dart';
 import 'package:monkeyfood/cubit/cart_cubit.dart';
@@ -12,8 +13,10 @@ import 'package:monkeyfood/cubit/order_cubit.dart';
 import 'package:monkeyfood/cubit/place_order_cubit.dart';
 import 'package:monkeyfood/cubit/profile_cubit.dart';
 import 'package:monkeyfood/cubit/rating_cubit.dart';
+import 'package:monkeyfood/cubit/review_cubit.dart';
 import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
+import 'package:monkeyfood/pages/home/review_page.dart';
 import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
 import 'package:monkeyfood/pages/profile/favorite_page.dart';
 import 'package:monkeyfood/pages/home/food_page.dart';
@@ -92,6 +95,14 @@ final _router = GoRouter(
                   path: 'food/:id',
                   builder: (_, state) =>
                       FoodPage(id: int.parse(state.pathParameters['id']!)),
+                  routes: [
+                    GoRoute(
+                      path: 'reviews',
+                      builder: (context, state) => ReviewPage(
+                        id: int.parse(state.pathParameters['id']!),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -146,16 +157,14 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => PlaceOrderCubit(OrderRepositories())),
         BlocProvider(create: (context) => RatingCubit(RatingRepositories())),
         BlocProvider(create: (context) => AddRatingCubit(RatingRepositories())),
+        BlocProvider(create: (context) => ReviewCubit(RatingRepositories())),
         BlocProvider(
           create: (context) => FavoriteCubit(FavoriteRepositories()),
         ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
-          useMaterial3: true,
-        ),
+        theme: ThemeData(colorScheme: colorScheme, useMaterial3: true),
         routerConfig: _router,
       ),
     );

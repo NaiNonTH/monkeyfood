@@ -1,7 +1,25 @@
 import 'package:monkeyfood/models/food.dart';
+import 'package:monkeyfood/models/review.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
 
 class RatingRepositories {
+  Future<List<Review>> getReviews(int foodId) async {
+    final res = await supabase
+        .from('reviews')
+        .select('*, profiles(display_name)')
+        .eq('food_id', foodId);
+
+    return res
+        .map(
+          (review) => Review(
+            displayName: review['profiles']['display_name'],
+            rating: review['rating'],
+            comment: review['comment'],
+          ),
+        )
+        .toList();
+  }
+
   Future<List<Food>> getFoodsToRate() async {
     final reviewed = await supabase
         .from('reviews')

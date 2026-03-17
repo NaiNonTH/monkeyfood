@@ -1,4 +1,5 @@
 import 'package:monkeyfood/models/food.dart';
+import 'package:monkeyfood/models/review.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
 
 class FoodRepositories {
@@ -18,6 +19,13 @@ class FoodRepositories {
             originalPrice: value['original_price'].toDouble(),
             imageName: value['image_name'],
             rating: value['avg_rating'].toDouble(),
+            latestReview: (value['latest_rating'] == null)
+                ? null
+                : Review(
+                    displayName: value['latest_reviewer'],
+                    rating: value['latest_rating'],
+                    comment: value['latest_comment'],
+                  ),
           ),
         )
         .toList();
@@ -38,6 +46,13 @@ class FoodRepositories {
       originalPrice: res['original_price'].toDouble(),
       imageName: res['image_name'],
       rating: res['avg_rating'].toDouble(),
+      latestReview: (res['latest_rating'] == null)
+          ? null
+          : Review(
+              displayName: res['latest_reviewer'],
+              rating: res['latest_rating'],
+              comment: res['latest_comment'],
+            ),
     );
   }
 }

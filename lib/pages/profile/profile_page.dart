@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkeyfood/config.dart';
 import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/states/update_profile_state.dart';
 import 'package:monkeyfood/widgets/main_app_bar.dart';
@@ -200,12 +201,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       onPressed: () =>
                                           Navigator.of(context).pop(false),
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: ColorScheme.fromSeed(
-                                          seedColor: Colors.orange,
-                                        ).primary,
-                                        foregroundColor: ColorScheme.fromSeed(
-                                          seedColor: Colors.orange,
-                                        ).onPrimary,
+                                        backgroundColor: colorScheme.primary,
+                                        foregroundColor: colorScheme.onPrimary,
                                       ),
                                       child: const Text('Stay Signed In'),
                                     ),

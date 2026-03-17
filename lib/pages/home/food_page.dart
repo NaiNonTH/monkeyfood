@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:monkeyfood/config.dart';
 import 'package:monkeyfood/cubit/add_to_cart_cubit.dart';
 import 'package:monkeyfood/cubit/food_cubit.dart';
 import 'package:monkeyfood/cubit/foods_cubit.dart';
@@ -180,6 +182,86 @@ class _FoodPageState extends State<FoodPage> {
                                   color: Colors.black87,
                                 ),
                               ),
+                              SizedBox(height: 8.0),
+                              if (foodState.food.latestReview != null)
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      size: 48,
+                                      color: Colors.orange,
+                                    ),
+                                    SizedBox(width: 4),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                foodState.food.rating
+                                                    .toStringAsFixed(2),
+                                                style: TextStyle(
+                                                  fontSize: 36.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              SizedBox(width: 4),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                  top: 8,
+                                                ),
+                                                child: const Text(
+                                                  '/5',
+                                                  style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8.0),
+                                          Container(
+                                            width: double.infinity,
+                                            padding: EdgeInsets.all(16.0),
+                                            decoration: BoxDecoration(
+                                              color: colorScheme.primaryFixed,
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(16.0),
+                                                bottomLeft: Radius.circular(
+                                                  16.0,
+                                                ),
+                                                bottomRight: Radius.circular(
+                                                  16.0,
+                                                ),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              foodState
+                                                  .food
+                                                  .latestReview!
+                                                  .comment!,
+                                            ),
+                                          ),
+                                          SizedBox(height: 8),
+                                          TextButton(
+                                            onPressed: () {
+                                              context.push(
+                                                '/food/${widget.id}/reviews',
+                                              );
+                                            },
+                                            child: const Text('More Reviews'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                             ],
                           ),
                         ),

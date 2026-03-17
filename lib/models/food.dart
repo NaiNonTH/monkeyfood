@@ -1,3 +1,5 @@
+import 'package:monkeyfood/models/review.dart';
+
 class Food {
   final String title;
   final String description;
@@ -37,6 +39,7 @@ class Food {
 
 class FoodWithAvgRating extends Food {
   final double rating;
+  final Review? latestReview;
 
   FoodWithAvgRating({
     required super.id,
@@ -46,6 +49,7 @@ class FoodWithAvgRating extends Food {
     required super.originalPrice,
     required super.imageName,
     required this.rating,
+    this.latestReview,
   });
 
   @override
@@ -57,6 +61,7 @@ class FoodWithAvgRating extends Food {
     double? originalPrice,
     double? price,
     double? rating,
+    Review? latestReview,
   }) {
     return FoodWithAvgRating(
       title: title ?? this.title,
@@ -66,6 +71,7 @@ class FoodWithAvgRating extends Food {
       originalPrice: originalPrice ?? this.originalPrice,
       price: price ?? this.price,
       rating: rating ?? this.rating,
+      latestReview: latestReview ?? this.latestReview,
     );
   }
 }
