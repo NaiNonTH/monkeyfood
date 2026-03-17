@@ -221,6 +221,47 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                       ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                // context.push('/profile/track-my-order');
+                              },
+                              style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadiusGeometry.all(
+                                    Radius.zero,
+                                  ),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Icon(Icons.assignment, size: 32),
+                                  SizedBox(height: 4),
+                                  Text('Incoming Orders'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ListView(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        children: [
+                          ListTile(
+                            title: const Text('Manage Menus'),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 14,
+                            ),
+                            onTap: () {
+                              context.push('/profile/restaurant/manage-menus');
+                            },
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 );

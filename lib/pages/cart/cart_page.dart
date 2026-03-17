@@ -8,6 +8,7 @@ import 'package:monkeyfood/states/add_to_cart_state.dart';
 import 'package:monkeyfood/states/cart_state.dart';
 import 'package:monkeyfood/states/place_order_state.dart';
 import 'package:monkeyfood/widgets/main_app_bar.dart';
+import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 
 class CartPage extends StatefulWidget {
@@ -64,202 +65,175 @@ class _CartPageState extends State<CartPage> {
               switch (cartState) {
                 case CartLoaded():
                   if (cartState.cartItems.isEmpty) {
-                    return SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(
-                        parent: ClampingScrollPhysics(),
-                      ),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight:
-                              MediaQuery.of(context).size.height -
-                              kToolbarHeight * 2 -
-                              kBottomNavigationBarHeight * 2,
-                        ),
-                        child: Center(child: Text('Cart is empty.')),
-                      ),
+                    return ScrollProvider(
+                      child: Center(child: Text('Cart is empty.')),
                     );
                   }
 
-                  return SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(
-                      parent: ClampingScrollPhysics(),
-                    ),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight:
-                            MediaQuery.of(context).size.height -
-                            kToolbarHeight * 2 -
-                            kBottomNavigationBarHeight * 2,
-                      ),
-                      child: Column(
-                        children: [
-                          ListView.separated(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            separatorBuilder: (context, index) =>
-                                Divider(height: 1),
-                            itemCount: cartState.cartItems.length,
-                            itemBuilder: (context, index) => Row(
-                              children: [
-                                SizedBox(
-                                  width: 100,
-                                  height: 72,
-                                  child: Image.network(
-                                    FoodImageService.instance.url(
-                                          cartState
-                                              .cartItems[index]
-                                              .item
-                                              .imageName,
-                                        ) ??
-                                        '',
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) => Center(
-                                          child: Icon(Icons.error_outline),
-                                        ),
-                                  ),
+                  return ScrollProvider(
+                    child: Column(
+                      children: [
+                        ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) =>
+                              Divider(height: 1),
+                          itemCount: cartState.cartItems.length,
+                          itemBuilder: (context, index) => Row(
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                height: 72,
+                                child: Image.network(
+                                  FoodImageService.instance.url(
+                                        cartState
+                                            .cartItems[index]
+                                            .item
+                                            .imageName,
+                                      ) ??
+                                      '',
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Center(child: Icon(Icons.error_outline)),
                                 ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          cartState.cartItems[index].item.title,
-                                        ),
-                                        SizedBox(height: 4),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              '\$${cartState.cartItems[index].totalOriginalPrice.toStringAsFixed(2)}',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              '\$${cartState.cartItems[index].totalPrice.toStringAsFixed(2)}',
-                                              style: TextStyle(
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              width: 1,
+                                      Text(
+                                        cartState.cartItems[index].item.title,
+                                      ),
+                                      SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '\$${cartState.cartItems[index].totalOriginalPrice.toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
                                               color: Colors.grey,
                                             ),
                                           ),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            GestureDetector(
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(
-                                                  8.0,
-                                                ),
-                                                child: Icon(
-                                                  Icons.remove,
-                                                  size: 16,
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                context
-                                                    .read<CartCubit>()
-                                                    .decrementItemAmount(
-                                                      cartState
-                                                          .cartItems[index]
-                                                          .id,
-                                                    );
-                                              },
+                                          SizedBox(width: 4),
+                                          Text(
+                                            '\$${cartState.cartItems[index].totalPrice.toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              cartState.cartItems[index].amount
-                                                  .toString(),
-                                            ),
-                                            SizedBox(width: 4),
-                                            GestureDetector(
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(
-                                                  8.0,
-                                                ),
-                                                child: Icon(
-                                                  Icons.add,
-                                                  size: 16,
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                context
-                                                    .read<CartCubit>()
-                                                    .incrementItemAmount(
-                                                      cartState
-                                                          .cartItems[index]
-                                                          .id,
-                                                    );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(width: 4),
-                                      GestureDetector(
-                                        onTap: () {
-                                          context
-                                              .read<CartCubit>()
-                                              .removeCartItem(
-                                                cartState.cartItems[index].id,
-                                              );
-                                        },
-                                        child: Icon(
-                                          Icons.delete_outline,
-                                          size: 20,
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: (cartState.isRefreshing)
-                                ? () {}
-                                : () {
-                                    context.read<PlaceOrderCubit>().placeOrder(
-                                      cartState.cartItems,
-                                    );
-                                  },
-                            child: (cartState.isRefreshing)
-                                ? SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            width: 1,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(
+                                                8.0,
+                                              ),
+                                              child: Icon(
+                                                Icons.remove,
+                                                size: 16,
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              context
+                                                  .read<CartCubit>()
+                                                  .decrementItemAmount(
+                                                    cartState
+                                                        .cartItems[index]
+                                                        .id,
+                                                  );
+                                            },
+                                          ),
+                                          SizedBox(width: 4),
+                                          Text(
+                                            cartState.cartItems[index].amount
+                                                .toString(),
+                                          ),
+                                          SizedBox(width: 4),
+                                          GestureDetector(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(
+                                                8.0,
+                                              ),
+                                              child: Icon(Icons.add, size: 16),
+                                            ),
+                                            onTap: () {
+                                              context
+                                                  .read<CartCubit>()
+                                                  .incrementItemAmount(
+                                                    cartState
+                                                        .cartItems[index]
+                                                        .id,
+                                                  );
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  )
-                                : Text('Place Order'),
+                                    SizedBox(width: 4),
+                                    GestureDetector(
+                                      onTap: () {
+                                        context
+                                            .read<CartCubit>()
+                                            .removeCartItem(
+                                              cartState.cartItems[index].id,
+                                            );
+                                      },
+                                      child: Icon(
+                                        Icons.delete_outline,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        ElevatedButton(
+                          onPressed: (cartState.isRefreshing)
+                              ? () {}
+                              : () {
+                                  context.read<PlaceOrderCubit>().placeOrder(
+                                    cartState.cartItems,
+                                  );
+                                },
+                          child: (cartState.isRefreshing)
+                              ? SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text('Place Order'),
+                        ),
+                      ],
                     ),
                   );
                 case CartError():

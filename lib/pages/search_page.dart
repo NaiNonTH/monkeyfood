@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/cubit/search_cubit.dart';
 import 'package:monkeyfood/states/search_state.dart';
 import 'package:monkeyfood/widgets/food_card_grid.dart';
+import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 
 class SearchPage extends StatefulWidget {
@@ -32,29 +33,20 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(parent: ClampingScrollPhysics()),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight:
-                MediaQuery.of(context).size.height -
-                kToolbarHeight * 2 -
-                kBottomNavigationBarHeight * 2,
-          ),
-          child: BlocBuilder<SearchCubit, SearchState>(
-            builder: (context, searchState) {
-              switch (searchState) {
-                case Searched():
-                  return FoodCardGrid(foods: searchState.results);
-                case SearchInit():
-                  return Text('');
-                case SearchError():
-                  return ShowError(message: searchState.message);
-                default:
-                  return Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
+      body: ScrollProvider(
+        child: BlocBuilder<SearchCubit, SearchState>(
+          builder: (context, searchState) {
+            switch (searchState) {
+              case Searched():
+                return FoodCardGrid(foods: searchState.results);
+              case SearchInit():
+                return Text('');
+              case SearchError():
+                return ShowError(message: searchState.message);
+              default:
+                return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );

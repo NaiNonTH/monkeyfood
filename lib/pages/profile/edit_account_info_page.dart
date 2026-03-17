@@ -6,6 +6,7 @@ import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/models/profile.dart';
 import 'package:monkeyfood/states/profile_state.dart';
 import 'package:monkeyfood/states/update_profile_state.dart';
+import 'package:monkeyfood/widgets/scroll_provider.dart';
 
 class EditAccountInfoPage extends StatefulWidget {
   const EditAccountInfoPage({super.key});
@@ -51,87 +52,92 @@ class _EditAccountInfoPageState extends State<EditAccountInfoPage> {
                   _phoneController.text = profileState.user.tel;
                   _locationController.text = profileState.user.location;
 
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              _buildTextField(
-                                label: 'Display Name',
-                                controller: _displayNameController,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "Display Name can't be empty";
-                                  }
+                  return ScrollProvider(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                _buildTextField(
+                                  label: 'Display Name',
+                                  controller: _displayNameController,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Display Name can't be empty";
+                                    }
 
-                                  return null;
-                                },
-                              ),
-                              SizedBox(height: 16.0),
-                              _buildTextField(
-                                label: 'Phone Number',
-                                controller: _phoneController,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "Phone Number can't be empty";
-                                  }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(height: 16.0),
+                                _buildTextField(
+                                  label: 'Phone Number',
+                                  controller: _phoneController,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Phone Number can't be empty";
+                                    }
 
-                                  if (value.length != 10) {
-                                    return "Phone Number must contain 10 numbers";
-                                  }
+                                    if (value.length != 10) {
+                                      return "Phone Number must contain 10 numbers";
+                                    }
 
-                                  if (value[0] != '0') {
-                                    return "Phone Number must start with 0";
-                                  }
+                                    if (value[0] != '0') {
+                                      return "Phone Number must start with 0";
+                                    }
 
-                                  return null;
-                                },
-                              ),
-                              SizedBox(height: 16.0),
-                              _buildTextField(
-                                label: 'Location',
-                                controller: _locationController,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "Location can't be empty";
-                                  }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(height: 16.0),
+                                _buildTextField(
+                                  label: 'Location',
+                                  controller: _locationController,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Location can't be empty";
+                                    }
 
-                                  return null;
-                                },
-                              ),
-                            ],
+                                    return null;
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 16.0),
-                        ElevatedButton(
-                          onPressed: (updateProfileState is UpdatingProfile)
-                              ? () {}
-                              : () {
-                                  if (_formKey.currentState!.validate()) {
-                                    context
-                                        .read<UpdateProfileCubit>()
-                                        .updateUserProfile(
-                                          Profile(
-                                            displayName:
-                                                _displayNameController.text,
-                                            tel: _phoneController.text,
-                                            location: _locationController.text,
-                                          ),
-                                        );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: const Text('nuyh')),
-                                    );
-                                  }
-                                },
-                          child: (updateProfileState is UpdatingProfile)
-                              ? Center(child: CircularProgressIndicator())
-                              : const Text('Submit Profile Edits'),
-                        ),
-                      ],
+                          SizedBox(height: 16.0),
+                          ElevatedButton(
+                            onPressed: (updateProfileState is UpdatingProfile)
+                                ? () {}
+                                : () {
+                                    if (_formKey.currentState!.validate()) {
+                                      context
+                                          .read<UpdateProfileCubit>()
+                                          .updateUserProfile(
+                                            Profile(
+                                              displayName:
+                                                  _displayNameController.text,
+                                              tel: _phoneController.text,
+                                              location:
+                                                  _locationController.text,
+                                            ),
+                                          );
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(content: const Text('nuyh')),
+                                      );
+                                    }
+                                  },
+                            child: (updateProfileState is UpdatingProfile)
+                                ? Center(child: CircularProgressIndicator())
+                                : const Text('Submit Profile Edits'),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 } else {

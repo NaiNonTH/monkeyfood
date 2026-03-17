@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/cubit/review_cubit.dart';
 import 'package:monkeyfood/states/review_state.dart';
+import 'package:monkeyfood/widgets/line_box.dart';
+import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 
 class ReviewPage extends StatefulWidget {
@@ -32,23 +34,11 @@ class _ReviewPageState extends State<ReviewPage> {
           builder: (context, reviewState) {
             switch (reviewState) {
               case ReviewLoaded():
-                return SingleChildScrollView(
+                return ScrollProvider(
                   child: Column(
                     children: reviewState.reviews
                         .map(
-                          (review) => Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              border: BoxBorder.fromLTRB(
-                                bottom: BorderSide(
-                                  width: 1,
-                                  color: Colors.grey[400]!,
-                                ),
-                              ),
-                            ),
+                          (review) => LineBox(
                             child: Column(
                               children: [
                                 Row(
@@ -90,19 +80,8 @@ class _ReviewPageState extends State<ReviewPage> {
               case ReviewError():
                 return ShowError(message: reviewState.message);
               default:
-                return SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(
-                    parent: ClampingScrollPhysics(),
-                  ),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight:
-                          MediaQuery.of(context).size.height -
-                          kToolbarHeight * 2 -
-                          kBottomNavigationBarHeight * 2,
-                    ),
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
+                return ScrollProvider(
+                  child: Center(child: CircularProgressIndicator()),
                 );
             }
           },

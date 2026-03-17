@@ -6,6 +6,7 @@ import 'package:monkeyfood/pages/profile/rating_page.dart';
 import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/add_rating_state.dart';
 import 'package:monkeyfood/states/rating_state.dart';
+import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 
 class ToRatePage extends StatefulWidget {
@@ -41,17 +42,8 @@ class _ToRatePageState extends State<ToRatePage> {
               switch (ratingState) {
                 case RatingLoaded():
                   if (ratingState.foods.isEmpty) {
-                    return SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight:
-                              MediaQuery.of(context).size.height -
-                              kToolbarHeight * 2 -
-                              kBottomNavigationBarHeight * 2,
-                        ),
-                        child: Center(child: const Text('No food to rate!')),
-                      ),
+                    return ScrollProvider(
+                      child: Center(child: const Text('No food to rate!')),
                     );
                   }
 

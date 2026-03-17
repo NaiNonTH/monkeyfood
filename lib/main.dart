@@ -17,7 +17,7 @@ import 'package:monkeyfood/cubit/review_cubit.dart';
 import 'package:monkeyfood/cubit/search_cubit.dart';
 import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
-import 'package:monkeyfood/pages/home/review_page.dart';
+import 'package:monkeyfood/pages/review_page.dart';
 import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
 import 'package:monkeyfood/pages/profile/favorite_page.dart';
 import 'package:monkeyfood/pages/food_page.dart';
