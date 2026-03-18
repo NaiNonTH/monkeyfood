@@ -19,4 +19,32 @@ class AddFoodCubit extends Cubit<AddFoodState> {
       emit(AddFoodError(message: e.toString()));
     }
   }
+
+  Future<void> updateFood(int foodId, FoodEdit food) async {
+    emit(AddingFood());
+
+    try {
+      await _foodRepositories.updateFood(foodId, food);
+
+      emit(FoodAdded());
+    } catch (e) {
+      emit(AddFoodError(message: e.toString()));
+    }
+  }
+
+  Future<void> deleteFood(int foodId) async {
+    emit(AddingFood());
+
+    try {
+      await _foodRepositories.deleteFood(foodId);
+
+      emit(FoodAdded());
+    } catch (e) {
+      emit(AddFoodError(message: e.toString()));
+    }
+  }
+
+  Future<void> reset() async {
+    emit(AddFoodInit());
+  }
 }

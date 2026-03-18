@@ -22,6 +22,8 @@ class _EditAccountInfoPageState extends State<EditAccountInfoPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
 
+  bool _isInitialized = false;
+
   @override
   void initState() {
     super.initState();
@@ -48,9 +50,13 @@ class _EditAccountInfoPageState extends State<EditAccountInfoPage> {
             BlocBuilder<ProfileCubit, ProfileState>(
               builder: (context, profileState) {
                 if (profileState is ProfileLoaded) {
-                  _displayNameController.text = profileState.user.displayName;
-                  _phoneController.text = profileState.user.tel;
-                  _locationController.text = profileState.user.location;
+                  if (!_isInitialized) {
+                    _displayNameController.text = profileState.user.displayName;
+                    _phoneController.text = profileState.user.tel;
+                    _locationController.text = profileState.user.location;
+                  }
+
+                  _isInitialized = true;
 
                   return ScrollProvider(
                     child: Padding(

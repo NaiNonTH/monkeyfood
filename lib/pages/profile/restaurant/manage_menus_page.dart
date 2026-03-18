@@ -146,14 +146,12 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
                   ),
                 );
 
-                if (confirmed == true) {
+                if (confirmed == true && context.mounted) {
+                  await context.read<AddFoodCubit>().deleteFood(food.id);
+
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(SnackBar(content: const Text('Item Deleted')));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: const Text('Cancel Delete')),
-                  );
                 }
               },
               style: TextButton.styleFrom(foregroundColor: Colors.red),

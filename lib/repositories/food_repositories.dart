@@ -105,4 +105,20 @@ class FoodRepositories {
       'image_name': imageName,
     });
   }
+
+  Future<void> updateFood(int foodId, FoodEdit food) async {
+    await supabase
+        .from('foods')
+        .update({
+          'title': food.title,
+          'description': food.description,
+          'price': food.price,
+          'original_price': food.originalPrice,
+        })
+        .eq('id', foodId);
+  }
+
+  Future<void> deleteFood(int foodId) async {
+    await supabase.from('foods').delete().eq('id', foodId);
+  }
 }
