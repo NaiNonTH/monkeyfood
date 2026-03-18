@@ -21,11 +21,11 @@ class _FoodCardGridState extends State<FoodCardGrid> {
     return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,
         childAspectRatio: 1.0 / sqrt(2),
+        maxCrossAxisExtent: 250,
       ),
       itemCount: widget.foods.length,
       itemBuilder: (context, index) {
