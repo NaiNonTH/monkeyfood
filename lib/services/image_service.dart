@@ -1,10 +1,12 @@
+import 'package:monkeyfood/services/supabase_service.dart';
+
 abstract class ImageService {
   String get groupName => 'image';
 
   String? url(String? imageName) {
     if (imageName == null) return null;
 
-    return 'https://aymxpmooklbwlnojtltx.supabase.co/storage/v1/object/public/$groupName/$imageName';
+    return supabase.storage.from('food-images').getPublicUrl(imageName);
   }
 }
 
