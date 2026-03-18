@@ -19,6 +19,18 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
+  Future<void> loadFoodEntries() async {
+    emit(Searching());
+
+    try {
+      final results = await _foodRepositories.getFoodEntries();
+
+      emit(Searched(results: results));
+    } catch (e) {
+      emit(SearchError(message: e.toString()));
+    }
+  }
+
   Future<void> resetResults() async {
     emit(SearchInit());
   }

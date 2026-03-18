@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkeyfood/config.dart';
 import 'package:monkeyfood/cubit/add_food_cubit.dart';
-import 'package:monkeyfood/cubit/foods_cubit.dart';
+import 'package:monkeyfood/cubit/search_cubit.dart';
 import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/add_food_state.dart';
-import 'package:monkeyfood/states/foods_state.dart';
+import 'package:monkeyfood/states/search_state.dart';
 import 'package:monkeyfood/widgets/line_box.dart';
 import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
@@ -20,10 +20,12 @@ class ManageMenusPage extends StatefulWidget {
 }
 
 class _ManageMenusPageState extends State<ManageMenusPage> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    context.read<FoodsCubit>().loadFoodEntries();
+    context.read<SearchCubit>().loadFoodEntries();
   }
 
   @override
@@ -39,32 +41,73 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
       body: ScrollProvider(
         child: BlocListener<AddFoodCubit, AddFoodState>(
           listener: (context, addFoodState) {
-            if (addFoodState is FoodAdded) {}
-          },
-          child: BlocBuilder<FoodsCubit, FoodsState>(
-            builder: (context, foodsState) {
-              switch (foodsState) {
-                case FoodsLoaded():
-                  final foods = foodsState.foods;
-
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 80.0),
-                    child: Column(
-                      children: List<Widget>.generate(foodsState.foods.length, (
-                        index,
-                      ) {
-                        final food = foods[index];
-
-                        return LineBox(child: _buildMenu(food));
-                      }),
-                    ),
-                  );
-                case FoodsError():
-                  return ShowError(message: foodsState.message);
-                default:
-                  return Center(child: CircularProgressIndicator());
+            if (addFoodState is FoodAdded) {
+              if (_searchController.text.isEmpty) {
+                context.read<SearchCubit>().loadFoodEntries();
+              } else {
+                context.read<SearchCubit>().searchFoodEntries(
+                  _searchController.text,
+                );
               }
-            },
+            }
+          },
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: SearchBar(
+                  elevation: WidgetStatePropertyAll(2.0),
+                  leading: Icon(Icons.search),
+                  hintText: 'Search Menus...',
+                  onSubmitted: (value) {
+                    context.read<SearchCubit>().searchFoodEntries(value);
+                  },
+                  padding: WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(horizontal: 16.0),
+                  ),
+                  trailing: [
+                    IconButton(
+                      onPressed: () {
+                        _searchController.text = '';
+                        context.read<SearchCubit>().loadFoodEntries();
+                      },
+                      icon: Icon(Icons.close),
+                    ),
+                  ],
+                ),
+              ),
+              BlocBuilder<SearchCubit, SearchState>(
+                builder: (context, searchState) {
+                  switch (searchState) {
+                    case Searched():
+                      final foods = searchState.results;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 80.0),
+                        child: Column(
+                          children: List<Widget>.generate(foods.length, (
+                            index,
+                          ) {
+                            final food = foods[index];
+
+                            return LineBox(child: _buildMenu(food));
+                          }),
+                        ),
+                      );
+                    case SearchError():
+                      return ShowError(message: searchState.message);
+                    default:
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 32.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ),
