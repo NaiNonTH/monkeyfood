@@ -1,6 +1,8 @@
 import 'package:monkeyfood/models/food.dart';
+import 'package:monkeyfood/models/food_upload.dart';
 import 'package:monkeyfood/models/review.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FoodRepositories {
   Future<List<FoodWithAvgRating>> getFoodEntries() async {
@@ -82,5 +84,25 @@ class FoodRepositories {
               comment: res['latest_comment'],
             ),
     );
+  }
+
+  Future<void> addFood(FoodUpload food) async {
+    final fullPath = await supabase.storage
+        .from('food-images')
+        .uploadBinary(
+          'uploads/${food.upload.name}',
+          food.upload.bytes!,
+          fileOptions: FileOptions(upsert: false),
+        );
+
+    final imageName = fullPath.substring(fullPath.indexOf('/') + 1);
+
+    await supabase.from('foods').insert({
+      'title': food.title,
+      'description': food.description,
+      'price': food.price,
+      'original_price': food.originalPrice,
+      'image_name': imageName,
+    });
   }
 }
