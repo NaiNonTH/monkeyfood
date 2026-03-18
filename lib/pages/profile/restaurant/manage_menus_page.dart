@@ -9,6 +9,7 @@ import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/add_food_state.dart';
 import 'package:monkeyfood/states/foods_state.dart';
 import 'package:monkeyfood/widgets/line_box.dart';
+import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 
 class ManageMenusPage extends StatefulWidget {
@@ -20,6 +21,12 @@ class ManageMenusPage extends StatefulWidget {
 
 class _ManageMenusPageState extends State<ManageMenusPage> {
   @override
+  void initState() {
+    super.initState();
+    context.read<FoodsCubit>().loadFoodEntries();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Manage Menus')),
@@ -29,13 +36,10 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
         },
         child: Icon(Icons.add),
       ),
-      body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
+      body: ScrollProvider(
         child: BlocListener<AddFoodCubit, AddFoodState>(
           listener: (context, addFoodState) {
-            if (addFoodState is FoodAdded) {
-              context.read<FoodsCubit>().loadFoodEntries();
-            }
+            if (addFoodState is FoodAdded) {}
           },
           child: BlocBuilder<FoodsCubit, FoodsState>(
             builder: (context, foodsState) {
@@ -73,7 +77,12 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(width: 8),
+            Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
               width: 100,
               height: 100,
               child: Image.network(
@@ -83,7 +92,7 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
                     Center(child: Icon(Icons.error_outline)),
               ),
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,61 +114,74 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
         ),
         SizedBox(height: 8),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () {
-                context.push(
-                  '/profile/restaurant/manage-menus/edit/${food.id}',
-                );
-              },
-              child: const Text('Edit'),
+              onPressed: () {},
+              style: TextButton.styleFrom(padding: EdgeInsets.all(6)),
+              child: _buildButtonChild('Change Image', Icons.image),
             ),
-            TextButton(
-              onPressed: () async {
-                final confirmed = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    icon: Icon(Icons.warning),
-                    title: Text('Delete Item?'),
-                    content: Text(
-                      'Are you sure you want to delete ${food.title}?',
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
-                        child: const Text('Delete'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: colorScheme.primary,
-                          foregroundColor: colorScheme.onPrimary,
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    context.push(
+                      '/profile/restaurant/manage-menus/edit/${food.id}',
+                    );
+                  },
+                  child: _buildButtonChild('Edit Food Details', Icons.edit),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        icon: Icon(Icons.warning),
+                        title: Text('Delete Item?'),
+                        content: Text(
+                          'Are you sure you want to delete ${food.title}?',
                         ),
-                        child: const Text('Cancel'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                            child: const Text('Delete'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: colorScheme.primary,
+                              foregroundColor: colorScheme.onPrimary,
+                            ),
+                            child: const Text('Cancel'),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
+                    );
 
-                if (confirmed == true && context.mounted) {
-                  await context.read<AddFoodCubit>().deleteFood(food.id);
+                    if (confirmed == true && context.mounted) {
+                      await context.read<AddFoodCubit>().deleteFood(food.id);
 
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: const Text('Item Deleted')));
-                }
-              },
-              style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: const Text('Delete'),
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: const Text('Item Deleted')),
+                      );
+                    }
+                  },
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
+                  child: _buildButtonChild('Delete', Icons.delete),
+                ),
+              ],
             ),
           ],
         ),
       ],
     );
+  }
+
+  Widget _buildButtonChild(String label, IconData icon) {
+    return Row(children: [Icon(icon), const SizedBox(width: 4), Text(label)]);
   }
 }
