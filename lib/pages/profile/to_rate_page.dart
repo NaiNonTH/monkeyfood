@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/cubit/add_rating_cubit.dart';
-import 'package:monkeyfood/cubit/rating_cubit.dart';
+import 'package:monkeyfood/cubit/rate_cubit.dart';
+import 'package:monkeyfood/cubit/view_foods_to_rate_cubit.dart';
 import 'package:monkeyfood/pages/profile/rating_page.dart';
 import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/add_rating_state.dart';
-import 'package:monkeyfood/states/rating_state.dart';
+import 'package:monkeyfood/states/view_foods_to_rate_state.dart';
 import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 

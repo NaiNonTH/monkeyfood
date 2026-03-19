@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkeyfood/config.dart';
-import 'package:monkeyfood/cubit/add_to_cart_cubit.dart';
-import 'package:monkeyfood/cubit/food_cubit.dart';
-import 'package:monkeyfood/cubit/foods_cubit.dart';
+import 'package:monkeyfood/cubit/add_cart_item_cubit.dart';
+import 'package:monkeyfood/cubit/view_food_cubit.dart';
+import 'package:monkeyfood/cubit/view_foods_cubit.dart';
 import 'package:monkeyfood/services/image_service.dart';
-import 'package:monkeyfood/states/add_to_cart_state.dart';
-import 'package:monkeyfood/states/food_state.dart';
-import 'package:monkeyfood/states/foods_state.dart';
+import 'package:monkeyfood/states/add_cart_items_state.dart';
+import 'package:monkeyfood/states/view_food_state.dart';
+import 'package:monkeyfood/states/view_foods_state.dart';
 import 'package:monkeyfood/widgets/favorite.dart';
 import 'package:monkeyfood/widgets/food_card_grid.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
@@ -22,12 +22,26 @@ class FoodPage extends StatefulWidget {
   State<FoodPage> createState() => _FoodPageState();
 }
 
-class _FoodPageState extends State<FoodPage> {
+class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     context.read<FoodCubit>().loadFoodById(widget.id);
     context.read<FoodsCubit>().loadFoodEntries();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<FoodsCubit>().loadFoodEntries();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override

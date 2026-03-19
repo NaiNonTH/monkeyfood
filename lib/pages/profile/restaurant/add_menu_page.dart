@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:humanize/humanize.dart';
-import 'package:monkeyfood/cubit/add_food_cubit.dart';
+import 'package:monkeyfood/cubit/manage_menus_cubit.dart';
 import 'package:monkeyfood/models/food_upload.dart';
 import 'package:monkeyfood/models/img_upload.dart';
-import 'package:monkeyfood/states/add_food_state.dart';
+import 'package:monkeyfood/states/manage_menus_state.dart';
 
 class AddMenuPage extends StatefulWidget {
   const AddMenuPage({super.key});
@@ -40,15 +40,15 @@ class _AddMenuPageState extends State<AddMenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Add Menu')),
-      body: BlocConsumer<AddFoodCubit, AddFoodState>(
+      body: BlocConsumer<ManageMenusCubit, ManageMenusState>(
         listener: (context, addFoodstate) {
-          if (addFoodstate is FoodAdded) {
+          if (addFoodstate is MenusModified) {
             context.go('/profile/restaurant/manage-menus');
 
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: const Text('Food Uploaded')));
-          } else if (addFoodstate is AddFoodError) {
+          } else if (addFoodstate is ManageMenusError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Error: ${addFoodstate.message}')),
             );
@@ -196,7 +196,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                   ),
                   SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: (addFoodstate is AddingFood)
+                    onPressed: (addFoodstate is ModifyingMenus)
                         ? () {}
                         : () {
                             if (_formKey.currentState!.validate()) {
@@ -212,7 +212,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                                 return;
                               }
 
-                              context.read<AddFoodCubit>().addFood(
+                              context.read<ManageMenusCubit>().addFood(
                                 FoodUpload(
                                   title: _titleController.text,
                                   description: _descriptionController.text,
@@ -225,7 +225,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                               );
                             }
                           },
-                    child: (addFoodstate is AddingFood)
+                    child: (addFoodstate is ModifyingMenus)
                         ? const SizedBox(
                             width: 16,
                             height: 16,

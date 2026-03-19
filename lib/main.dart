@@ -3,24 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkeyfood/config.dart';
-import 'package:monkeyfood/cubit/add_food_cubit.dart';
-import 'package:monkeyfood/cubit/add_rating_cubit.dart';
-import 'package:monkeyfood/cubit/add_to_cart_cubit.dart';
-import 'package:monkeyfood/cubit/cart_cubit.dart';
-import 'package:monkeyfood/cubit/favorite_cubit.dart';
-import 'package:monkeyfood/cubit/food_cubit.dart';
-import 'package:monkeyfood/cubit/foods_cubit.dart';
-import 'package:monkeyfood/cubit/order_cubit.dart';
-import 'package:monkeyfood/cubit/place_order_cubit.dart';
-import 'package:monkeyfood/cubit/profile_cubit.dart';
-import 'package:monkeyfood/cubit/rating_cubit.dart';
-import 'package:monkeyfood/cubit/review_cubit.dart';
+import 'package:monkeyfood/cubit/manage_menus_cubit.dart';
+import 'package:monkeyfood/cubit/rate_cubit.dart';
+import 'package:monkeyfood/cubit/add_cart_item_cubit.dart';
+import 'package:monkeyfood/cubit/manage_cart_items_cubit.dart';
 import 'package:monkeyfood/cubit/search_cubit.dart';
+import 'package:monkeyfood/cubit/view_favorites_cubit.dart';
+import 'package:monkeyfood/cubit/view_food_cubit.dart';
+import 'package:monkeyfood/cubit/view_foods_cubit.dart';
+import 'package:monkeyfood/cubit/view_orders_cubit.dart';
+import 'package:monkeyfood/cubit/place_order_cubit.dart';
+import 'package:monkeyfood/cubit/view_profile_cubit.dart';
+import 'package:monkeyfood/cubit/view_foods_to_rate_cubit.dart';
+import 'package:monkeyfood/cubit/view_reviews_cubit.dart';
 import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/add_menu_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/edit_menu_page.dart';
-import 'package:monkeyfood/pages/review_page.dart';
+import 'package:monkeyfood/pages/reviews_page.dart';
 import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
 import 'package:monkeyfood/pages/profile/favorite_page.dart';
 import 'package:monkeyfood/pages/food_page.dart';
@@ -73,11 +73,14 @@ class SupabaseAuthNotifier extends ChangeNotifier {
 
 final _authNotifier = SupabaseAuthNotifier();
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final RouteObserver<ModalRoute<void>> _routeObserver =
+    RouteObserver<ModalRoute<void>>();
 
 final _router = GoRouter(
   initialLocation: '/',
   navigatorKey: _rootNavigatorKey,
   refreshListenable: _authNotifier,
+  observers: [_routeObserver],
   redirect: (context, state) {
     final isLoggedIn = supabase.auth.currentSession != null;
     final isOnAuth = ['/login', '/register'].contains(state.matchedLocation);
@@ -177,9 +180,10 @@ class MainApp extends StatelessWidget {
         BlocProvider(
           create: (context) => UpdateProfileCubit(ProfileRepositories()),
         ),
+        BlocProvider(create: (context) => SearchCubit(FoodRepositories())),
         BlocProvider(create: (context) => FoodCubit(FoodRepositories())),
         BlocProvider(create: (context) => FoodsCubit(FoodRepositories())),
-        BlocProvider(create: (context) => AddFoodCubit(FoodRepositories())),
+        BlocProvider(create: (context) => ManageMenusCubit(FoodRepositories())),
         BlocProvider(create: (context) => CartCubit(CartRepositories())),
         BlocProvider(create: (context) => AddToCartCubit(CartRepositories())),
         BlocProvider(create: (context) => OrderCubit(OrderRepositories())),
@@ -187,7 +191,6 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => RatingCubit(RatingRepositories())),
         BlocProvider(create: (context) => AddRatingCubit(RatingRepositories())),
         BlocProvider(create: (context) => ReviewCubit(RatingRepositories())),
-        BlocProvider(create: (context) => SearchCubit(FoodRepositories())),
         BlocProvider(
           create: (context) => FavoriteCubit(FavoriteRepositories()),
         ),

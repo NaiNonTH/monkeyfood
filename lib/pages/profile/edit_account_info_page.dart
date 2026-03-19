@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:monkeyfood/cubit/profile_cubit.dart';
+import 'package:monkeyfood/cubit/view_profile_cubit.dart';
 import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/models/profile.dart';
-import 'package:monkeyfood/states/profile_state.dart';
+import 'package:monkeyfood/states/view_profile_state.dart';
 import 'package:monkeyfood/states/update_profile_state.dart';
 import 'package:monkeyfood/widgets/scroll_provider.dart';
 

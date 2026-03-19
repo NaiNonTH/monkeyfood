@@ -6,9 +6,9 @@ import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/states/update_profile_state.dart';
 import 'package:monkeyfood/widgets/main_app_bar.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
-import 'package:monkeyfood/cubit/profile_cubit.dart';
+import 'package:monkeyfood/cubit/view_profile_cubit.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
-import 'package:monkeyfood/states/profile_state.dart';
+import 'package:monkeyfood/states/view_profile_state.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

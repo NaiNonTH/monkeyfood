@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkeyfood/config.dart';
-import 'package:monkeyfood/cubit/add_food_cubit.dart';
-import 'package:monkeyfood/cubit/search_cubit.dart';
+import 'package:monkeyfood/cubit/manage_menus_cubit.dart';
 import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/services/image_service.dart';
-import 'package:monkeyfood/states/add_food_state.dart';
-import 'package:monkeyfood/states/search_state.dart';
+import 'package:monkeyfood/states/manage_menus_state.dart';
 import 'package:monkeyfood/widgets/line_box.dart';
 import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
@@ -25,7 +23,7 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
   @override
   void initState() {
     super.initState();
-    context.read<SearchCubit>().loadFoodEntries();
+    context.read<ManageMenusCubit>().loadFoodEntries();
   }
 
   @override
@@ -39,76 +37,72 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
         child: Icon(Icons.add),
       ),
       body: ScrollProvider(
-        child: BlocListener<AddFoodCubit, AddFoodState>(
-          listener: (context, addFoodState) {
-            if (addFoodState is FoodAdded) {
-              if (_searchController.text.isEmpty) {
-                context.read<SearchCubit>().loadFoodEntries();
-              } else {
-                context.read<SearchCubit>().searchFoodEntries(
-                  _searchController.text,
-                );
-              }
-            }
-          },
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                child: SearchBar(
-                  elevation: WidgetStatePropertyAll(2.0),
-                  leading: Icon(Icons.search),
-                  hintText: 'Search Menus...',
-                  onSubmitted: (value) {
-                    context.read<SearchCubit>().searchFoodEntries(value);
-                  },
-                  padding: WidgetStatePropertyAll(
-                    EdgeInsets.symmetric(horizontal: 16.0),
-                  ),
-                  trailing: [
-                    IconButton(
-                      onPressed: () {
-                        _searchController.text = '';
-                        context.read<SearchCubit>().loadFoodEntries();
-                      },
-                      icon: Icon(Icons.close),
-                    ),
-                  ],
-                ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
               ),
-              BlocBuilder<SearchCubit, SearchState>(
-                builder: (context, searchState) {
-                  switch (searchState) {
-                    case Searched():
-                      final foods = searchState.results;
-
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 80.0),
-                        child: Column(
-                          children: List<Widget>.generate(foods.length, (
-                            index,
-                          ) {
-                            final food = foods[index];
-
-                            return LineBox(child: _buildMenu(food));
-                          }),
-                        ),
-                      );
-                    case SearchError():
-                      return ShowError(message: searchState.message);
-                    default:
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 32.0),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                  }
+              child: SearchBar(
+                elevation: WidgetStatePropertyAll(2.0),
+                leading: Icon(Icons.search),
+                hintText: 'Search Menus...',
+                onSubmitted: (value) {
+                  context.read<ManageMenusCubit>().searchFoodEntries(value);
                 },
+                padding: WidgetStatePropertyAll(
+                  EdgeInsets.symmetric(horizontal: 16.0),
+                ),
+                trailing: [
+                  IconButton(
+                    onPressed: () {
+                      _searchController.text = '';
+                      context.read<ManageMenusCubit>().loadFoodEntries();
+                    },
+                    icon: Icon(Icons.close),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            BlocConsumer<ManageMenusCubit, ManageMenusState>(
+              listener: (context, addFoodState) {
+                if (addFoodState is MenusModified) {
+                  if (_searchController.text.isEmpty) {
+                    context.read<ManageMenusCubit>().loadFoodEntries();
+                  } else {
+                    context.read<ManageMenusCubit>().searchFoodEntries(
+                      _searchController.text,
+                    );
+                  }
+                }
+              },
+              builder: (context, addFoodState) {
+                switch (addFoodState) {
+                  case MenusLoaded():
+                    final foods = addFoodState.foods;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 80.0),
+                      child: Column(
+                        children: List<Widget>.generate(foods.length, (index) {
+                          final food = foods[index];
+
+                          return LineBox(child: _buildMenu(food));
+                        }),
+                      ),
+                    );
+                  case ManageMenusError():
+                    return ShowError(message: addFoodState.message);
+                  default:
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 32.0),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -206,7 +200,9 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
                     );
 
                     if (confirmed == true && context.mounted) {
-                      await context.read<AddFoodCubit>().deleteFood(food.id);
+                      await context.read<ManageMenusCubit>().deleteFood(
+                        food.id,
+                      );
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: const Text('Item Deleted')),

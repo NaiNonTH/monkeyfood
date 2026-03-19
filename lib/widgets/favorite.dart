@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/cubit/favorite_cubit.dart';
+import 'package:monkeyfood/cubit/view_favorites_cubit.dart';
 import 'package:monkeyfood/models/food.dart';
-import 'package:monkeyfood/states/favorite_state.dart';
+import 'package:monkeyfood/states/view_favorites_state.dart';
 
 class FavoriteButton extends StatelessWidget {
   final Food food;

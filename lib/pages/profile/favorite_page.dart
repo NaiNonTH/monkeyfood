@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/cubit/favorite_cubit.dart';
+import 'package:monkeyfood/cubit/view_favorites_cubit.dart';
 import 'package:monkeyfood/services/image_service.dart';
-import 'package:monkeyfood/states/favorite_state.dart';
+import 'package:monkeyfood/states/view_favorites_state.dart';
 
 class FavoritePage extends StatelessWidget {
   const FavoritePage({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/repositories/cart_repositories.dart';
-import 'package:monkeyfood/states/add_to_cart_state.dart';
+import 'package:monkeyfood/states/add_cart_items_state.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AddToCartCubit extends Cubit<AddToCartState> {

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/repositories/profile_repositories.dart';
-import 'package:monkeyfood/states/profile_state.dart';
+import 'package:monkeyfood/states/view_profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   final ProfileRepositories _profileRepositories;

@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/cubit/foods_cubit.dart';
-import 'package:monkeyfood/states/foods_state.dart';
+import 'package:monkeyfood/cubit/view_foods_cubit.dart';
+import 'package:monkeyfood/states/view_foods_state.dart';
 import 'package:monkeyfood/widgets/carousel.dart';
 import 'package:monkeyfood/widgets/food_card_grid.dart';
 import 'package:monkeyfood/widgets/main_app_bar.dart';
@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();

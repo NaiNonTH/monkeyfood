@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/repositories/favorite_repositories.dart';
-import 'package:monkeyfood/states/favorite_state.dart';
+import 'package:monkeyfood/states/view_favorites_state.dart';
 
 class FavoriteCubit extends Cubit<FavoriteState> {
   final FavoriteRepositories _favoriteRepositories;

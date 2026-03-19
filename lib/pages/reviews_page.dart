@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/cubit/review_cubit.dart';
-import 'package:monkeyfood/states/review_state.dart';
+import 'package:monkeyfood/cubit/view_reviews_cubit.dart';
+import 'package:monkeyfood/states/view_reviews_state.dart';
 import 'package:monkeyfood/widgets/line_box.dart';
 import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
@@ -30,10 +30,10 @@ class _ReviewPageState extends State<ReviewPage> {
         onRefresh: () async {
           context.read<ReviewCubit>().getReviews(widget.id);
         },
-        child: BlocBuilder<ReviewCubit, ReviewState>(
+        child: BlocBuilder<ReviewCubit, ReviewsState>(
           builder: (context, reviewState) {
             switch (reviewState) {
-              case ReviewLoaded():
+              case ReviewsLoaded():
                 return ScrollProvider(
                   child: Column(
                     children: reviewState.reviews
@@ -77,7 +77,7 @@ class _ReviewPageState extends State<ReviewPage> {
                         .toList(),
                   ),
                 );
-              case ReviewError():
+              case ReviewsError():
                 return ShowError(message: reviewState.message);
               default:
                 return ScrollProvider(

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/repositories/rating_repositories.dart';
-import 'package:monkeyfood/states/rating_state.dart';
+import 'package:monkeyfood/states/view_foods_to_rate_state.dart';
 
 class RatingCubit extends Cubit<RatingState> {
   final RatingRepositories _ratingRepositories;

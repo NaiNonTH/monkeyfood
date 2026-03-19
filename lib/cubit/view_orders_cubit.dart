@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/models/order.dart';
 import 'package:monkeyfood/repositories/order_repositories.dart';
-import 'package:monkeyfood/states/order_state.dart';
+import 'package:monkeyfood/states/view_orders_state.dart';
 
 class OrderCubit extends Cubit<OrderState> {
   final OrderRepositories _orderRepositories;

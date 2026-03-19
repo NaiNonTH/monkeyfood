@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/cubit/add_rating_cubit.dart';
+import 'package:monkeyfood/cubit/rate_cubit.dart';
 import 'package:monkeyfood/states/add_rating_state.dart';
 
 class RatingPage extends StatefulWidget {

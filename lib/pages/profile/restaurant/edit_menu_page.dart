@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:monkeyfood/cubit/add_food_cubit.dart';
-import 'package:monkeyfood/cubit/food_cubit.dart';
+import 'package:monkeyfood/cubit/manage_menus_cubit.dart';
+import 'package:monkeyfood/cubit/view_food_cubit.dart';
 import 'package:monkeyfood/models/food_upload.dart';
-import 'package:monkeyfood/states/add_food_state.dart';
-import 'package:monkeyfood/states/food_state.dart';
+import 'package:monkeyfood/states/manage_menus_state.dart';
+import 'package:monkeyfood/states/view_food_state.dart';
 
 class EditMenuPage extends StatefulWidget {
   final int id;
@@ -38,11 +38,11 @@ class _EditMenuPageState extends State<EditMenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Edit Menu')),
-      body: BlocConsumer<AddFoodCubit, AddFoodState>(
+      body: BlocConsumer<ManageMenusCubit, ManageMenusState>(
         listener: (context, addFoodState) {
-          if (addFoodState is FoodAdded) {
+          if (addFoodState is MenusModified) {
             context.go('/profile/restaurant/manage-menus');
-          } else if (addFoodState is AddFoodError) {
+          } else if (addFoodState is ManageMenusError) {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(addFoodState.message)));
@@ -153,11 +153,11 @@ class _EditMenuPageState extends State<EditMenuPage> {
                       ),
                       SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: (addFoodState is AddingFood)
+                        onPressed: (addFoodState is ModifyingMenus)
                             ? () {}
                             : () {
                                 if (_formKey.currentState!.validate()) {
-                                  context.read<AddFoodCubit>().updateFood(
+                                  context.read<ManageMenusCubit>().updateFood(
                                     widget.id,
                                     FoodEdit(
                                       title: _titleController.text,
@@ -172,7 +172,7 @@ class _EditMenuPageState extends State<EditMenuPage> {
                                   );
                                 }
                               },
-                        child: (addFoodState is AddingFood)
+                        child: (addFoodState is ModifyingMenus)
                             ? SizedBox(
                                 width: 16,
                                 height: 16,

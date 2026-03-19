@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/cubit/add_to_cart_cubit.dart';
-import 'package:monkeyfood/cubit/cart_cubit.dart';
+import 'package:monkeyfood/cubit/add_cart_item_cubit.dart';
+import 'package:monkeyfood/cubit/manage_cart_items_cubit.dart';
 import 'package:monkeyfood/cubit/place_order_cubit.dart';
 import 'package:monkeyfood/services/image_service.dart';
-import 'package:monkeyfood/states/add_to_cart_state.dart';
-import 'package:monkeyfood/states/cart_state.dart';
+import 'package:monkeyfood/states/add_cart_items_state.dart';
+import 'package:monkeyfood/states/manage_cart_items_state.dart';
 import 'package:monkeyfood/states/place_order_state.dart';
 import 'package:monkeyfood/widgets/main_app_bar.dart';
 import 'package:monkeyfood/widgets/scroll_provider.dart';

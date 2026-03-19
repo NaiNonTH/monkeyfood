@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:humanize/humanize.dart';
-import 'package:monkeyfood/cubit/order_cubit.dart';
+import 'package:monkeyfood/cubit/view_orders_cubit.dart';
 import 'package:monkeyfood/models/order.dart';
 import 'package:monkeyfood/services/image_service.dart';
-import 'package:monkeyfood/states/order_state.dart';
+import 'package:monkeyfood/states/view_orders_state.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 
 class TrackMyOrderPage extends StatefulWidget {

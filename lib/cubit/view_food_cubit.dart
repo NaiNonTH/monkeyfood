@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkeyfood/states/food_state.dart';
+import 'package:monkeyfood/states/view_food_state.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
 
 class FoodCubit extends Cubit<FoodState> {
