@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/models/food_upload.dart';
 import 'package:monkeyfood/models/review.dart';
+import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FoodRepositories {
   Future<List<FoodWithAvgRating>> getFoodEntries() async {
@@ -87,13 +88,10 @@ class FoodRepositories {
   }
 
   Future<void> addFood(FoodUpload food) async {
-    final fullPath = await supabase.storage
-        .from('food-images')
-        .uploadBinary(
-          'uploads/${food.upload.name}',
-          food.upload.bytes!,
-          fileOptions: FileOptions(upsert: false),
-        );
+    final fullPath = await FoodImageService.instance.uploadBinary(
+      'uploads/${food.upload.name}',
+      food.upload.bytes!,
+    );
 
     final imageName = fullPath.substring(fullPath.indexOf('/') + 1);
 
@@ -106,7 +104,7 @@ class FoodRepositories {
     });
   }
 
-  Future<void> updateFood(int foodId, FoodEdit food) async {
+  Future<void> updateFoodDetails(int foodId, FoodEdit food) async {
     await supabase
         .from('foods')
         .update({
@@ -116,6 +114,10 @@ class FoodRepositories {
           'original_price': food.originalPrice,
         })
         .eq('id', foodId);
+  }
+
+  Future<void> updateFoodImage(String path, Uint8List bytes) async {
+    await FoodImageService.instance.updateBinary(path, bytes);
   }
 
   Future<void> deleteFood(int foodId) async {

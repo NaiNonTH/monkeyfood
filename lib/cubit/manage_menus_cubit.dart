@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkeyfood/models/food_upload.dart';
 import 'package:monkeyfood/repositories/food_repositories.dart';
@@ -48,11 +50,23 @@ class ManageMenusCubit extends Cubit<ManageMenusState> {
     }
   }
 
-  Future<void> updateFood(int foodId, FoodEdit food) async {
+  Future<void> updateFoodDetails(int foodId, FoodEdit food) async {
     emit(ModifyingMenus());
 
     try {
-      await _foodRepositories.updateFood(foodId, food);
+      await _foodRepositories.updateFoodDetails(foodId, food);
+
+      emit(MenusModified());
+    } catch (e) {
+      emit(ManageMenusError(message: e.toString()));
+    }
+  }
+
+  Future<void> updateFoodImage(String path, Uint8List bytes) async {
+    emit(ModifyingMenus());
+
+    try {
+      await _foodRepositories.updateFoodImage(path, bytes);
 
       emit(MenusModified());
     } catch (e) {

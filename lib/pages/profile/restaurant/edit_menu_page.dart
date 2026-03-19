@@ -157,19 +157,22 @@ class _EditMenuPageState extends State<EditMenuPage> {
                             ? () {}
                             : () {
                                 if (_formKey.currentState!.validate()) {
-                                  context.read<ManageMenusCubit>().updateFood(
-                                    widget.id,
-                                    FoodEdit(
-                                      title: _titleController.text,
-                                      description: _descriptionController.text,
-                                      price: double.parse(
-                                        _priceController.text,
-                                      ),
-                                      originalPrice: double.parse(
-                                        _originalPriceController.text,
-                                      ),
-                                    ),
-                                  );
+                                  context
+                                      .read<ManageMenusCubit>()
+                                      .updateFoodDetails(
+                                        widget.id,
+                                        FoodEdit(
+                                          title: _titleController.text,
+                                          description:
+                                              _descriptionController.text,
+                                          price: double.parse(
+                                            _priceController.text,
+                                          ),
+                                          originalPrice: double.parse(
+                                            _originalPriceController.text,
+                                          ),
+                                        ),
+                                      );
                                 }
                               },
                         child: (addFoodState is ModifyingMenus)

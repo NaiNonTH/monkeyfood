@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -154,7 +155,84 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  withData: true,
+                );
+
+                if (result != null && context.mounted) {
+                  final confirmed = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      icon: Icon(Icons.question_mark),
+                      title: const Text('Change Image?'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 96,
+                                height: 96,
+                                child: Image.network(
+                                  FoodImageService.instance.url(
+                                        food.imageName,
+                                      ) ??
+                                      '',
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Center(child: Icon(Icons.error_outline)),
+                                ),
+                              ),
+                              Icon(Icons.arrow_right, size: 48),
+                              SizedBox(
+                                width: 96,
+                                height: 96,
+                                child: Image.memory(
+                                  result.files.single.bytes!,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Center(child: Icon(Icons.error_outline)),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Are you sure you want to change the food cover for ${food.title}?',
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(true);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: colorScheme.primary,
+                            foregroundColor: colorScheme.onPrimary,
+                          ),
+                          child: const Text('Change'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (confirmed == true) {
+                    context.read<ManageMenusCubit>().updateFoodImage(
+                      food.imageName,
+                      result.files.single.bytes!,
+                    );
+                  }
+                }
+              },
               style: TextButton.styleFrom(padding: EdgeInsets.all(6)),
               child: _buildButtonChild('Change Image', Icons.image),
             ),

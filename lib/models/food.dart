@@ -3,7 +3,7 @@ import 'package:monkeyfood/models/review.dart';
 class Food {
   final String title;
   final String description;
-  final String? imageName;
+  final String imageName;
   final int id;
   final double originalPrice;
   final double price;
