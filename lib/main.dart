@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkeyfood/config.dart';
 import 'package:monkeyfood/cubit/change_order_status_cubit.dart';
+import 'package:monkeyfood/cubit/join_restaurant_cubit.dart';
 import 'package:monkeyfood/cubit/manage_menus_cubit.dart';
 import 'package:monkeyfood/cubit/rate_cubit.dart';
 import 'package:monkeyfood/cubit/add_cart_item_cubit.dart';
@@ -202,6 +203,9 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => ProfileCubit(ProfileRepositories())),
         BlocProvider(
           create: (context) => UpdateProfileCubit(ProfileRepositories()),
+        ),
+        BlocProvider(
+          create: (context) => JoinRestaurantCubit(ProfileRepositories()),
         ),
         BlocProvider(create: (context) => SearchCubit(FoodRepositories())),
         BlocProvider(create: (context) => FoodCubit(FoodRepositories())),

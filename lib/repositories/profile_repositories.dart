@@ -48,4 +48,24 @@ class ProfileRepositories {
         })
         .eq('id', supabase.auth.currentUser!.id);
   }
+
+  Future<void> joinRestaurant(String joinCode) async {
+    final res = await supabase
+        .from('restaurants')
+        .select('id')
+        .eq('join_code', joinCode)
+        .single();
+
+    await supabase
+        .from('profiles')
+        .update({'restaurant_id': res['id']})
+        .eq('id', supabase.auth.currentUser!.id);
+  }
+
+  Future<void> leaveRestaurant() async {
+    await supabase
+        .from('profiles')
+        .update({'restaurant_id': null})
+        .eq('id', supabase.auth.currentUser!.id);
+  }
 }
