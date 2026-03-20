@@ -100,6 +100,7 @@ class OrderRepositories {
             profile: Profile(
               displayName: orderItem['orderer_name'],
               tel: orderItem['orderer_tel'],
+              restaurant: null,
               location: orderItem['orderer_location'],
             ),
           ),
@@ -125,7 +126,7 @@ class OrderRepositories {
             ),
             unitPrice: orderItem['unit_price'],
             status: OrderStatus.values.byName(orderItem['status']),
-            profile: Profile(
+            profile: BaseProfile(
               displayName: orderItem['orderer_name'],
               tel: orderItem['orderer_tel'],
               location: orderItem['orderer_location'],

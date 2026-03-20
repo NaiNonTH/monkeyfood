@@ -12,7 +12,9 @@ import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 
 class ManageMenusPage extends StatefulWidget {
-  const ManageMenusPage({super.key});
+  final int restaurantId;
+
+  const ManageMenusPage({super.key, required this.restaurantId});
 
   @override
   State<ManageMenusPage> createState() => _ManageMenusPageState();
@@ -24,7 +26,7 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
   @override
   void initState() {
     super.initState();
-    context.read<ManageMenusCubit>().loadFoodEntries();
+    context.read<ManageMenusCubit>().loadMenus(widget.restaurantId);
   }
 
   @override
@@ -33,7 +35,9 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
       appBar: AppBar(title: const Text('Manage Menus')),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.push('/profile/restaurant/manage-menus/add');
+          context.push(
+            '/profile/restaurant/${widget.restaurantId}/manage-menus/add',
+          );
         },
         child: Icon(Icons.add),
       ),
@@ -50,7 +54,10 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
                 leading: Icon(Icons.search),
                 hintText: 'Search Menus...',
                 onSubmitted: (value) {
-                  context.read<ManageMenusCubit>().searchFoodEntries(value);
+                  context.read<ManageMenusCubit>().searchMenus(
+                    widget.restaurantId,
+                    value,
+                  );
                 },
                 padding: WidgetStatePropertyAll(
                   EdgeInsets.symmetric(horizontal: 16.0),
@@ -59,7 +66,9 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
                   IconButton(
                     onPressed: () {
                       _searchController.text = '';
-                      context.read<ManageMenusCubit>().loadFoodEntries();
+                      context.read<ManageMenusCubit>().loadMenus(
+                        widget.restaurantId,
+                      );
                     },
                     icon: Icon(Icons.close),
                   ),
@@ -70,9 +79,12 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
               listener: (context, addFoodState) {
                 if (addFoodState is MenusModified) {
                   if (_searchController.text.isEmpty) {
-                    context.read<ManageMenusCubit>().loadFoodEntries();
+                    context.read<ManageMenusCubit>().loadMenus(
+                      widget.restaurantId,
+                    );
                   } else {
-                    context.read<ManageMenusCubit>().searchFoodEntries(
+                    context.read<ManageMenusCubit>().searchMenus(
+                      widget.restaurantId,
                       _searchController.text,
                     );
                   }
@@ -241,7 +253,7 @@ class _ManageMenusPageState extends State<ManageMenusPage> {
                 TextButton(
                   onPressed: () {
                     context.push(
-                      '/profile/restaurant/manage-menus/edit/${food.id}',
+                      '/profile/restaurant/${widget.restaurantId}/manage-menus/edit/${food.id}',
                     );
                   },
                   child: _buildButtonChild('Edit Food Details', Icons.edit),

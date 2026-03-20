@@ -10,11 +10,11 @@ class ManageMenusCubit extends Cubit<ManageMenusState> {
 
   ManageMenusCubit(this._foodRepositories) : super(ManageMenusInit());
 
-  Future<void> loadFoodEntries() async {
+  Future<void> loadMenus(int restaurantId) async {
     emit(LoadingMenus());
 
     try {
-      final foods = await _foodRepositories.getFoodEntries();
+      final foods = await _foodRepositories.getMenus(restaurantId);
 
       emit(MenusLoaded(foods: foods));
     } catch (e) {
@@ -22,11 +22,11 @@ class ManageMenusCubit extends Cubit<ManageMenusState> {
     }
   }
 
-  Future<void> searchFoodEntries(String query) async {
+  Future<void> searchMenus(int restaurantId, String query) async {
     emit(LoadingMenus());
 
     try {
-      final results = await _foodRepositories.searchFoodEntries(query);
+      final results = await _foodRepositories.searchMenus(restaurantId, query);
 
       emit(MenusLoaded(foods: results));
     } catch (e) {
@@ -38,11 +38,11 @@ class ManageMenusCubit extends Cubit<ManageMenusState> {
     emit(ManageMenusInit());
   }
 
-  Future<void> addFood(FoodUpload food) async {
+  Future<void> addFood(int restaurantId, FoodUpload food) async {
     emit(ModifyingMenus());
 
     try {
-      await _foodRepositories.addFood(food);
+      await _foodRepositories.addFood(restaurantId, food);
 
       emit(MenusModified());
     } catch (e) {

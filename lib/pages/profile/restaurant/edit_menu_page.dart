@@ -10,8 +10,9 @@ import 'package:monkeyfood/states/view_food_state.dart';
 
 class EditMenuPage extends StatefulWidget {
   final int id;
+  final int restaurantId;
 
-  const EditMenuPage({super.key, required this.id});
+  const EditMenuPage({super.key, required this.id, required this.restaurantId});
 
   @override
   State<EditMenuPage> createState() => _EditMenuPageState();
@@ -41,7 +42,9 @@ class _EditMenuPageState extends State<EditMenuPage> {
       body: BlocConsumer<ManageMenusCubit, ManageMenusState>(
         listener: (context, addFoodState) {
           if (addFoodState is MenusModified) {
-            context.go('/profile/restaurant/manage-menus');
+            context.go(
+              '/profile/restaurant/${widget.restaurantId}/manage-menus',
+            );
           } else if (addFoodState is ManageMenusError) {
             ScaffoldMessenger.of(
               context,

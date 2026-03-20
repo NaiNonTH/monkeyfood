@@ -41,6 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context, profileState) {
             switch (profileState) {
               case ProfileLoaded():
+                debugPrint(profileState.user.restaurant.toString());
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,49 +174,57 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8.0),
-                      Row(
-                        children: [
-                          _buildBigIconButton(
-                            'Incoming Orders',
-                            Icons.assignment,
-                            '/profile/restaurant/incoming-orders',
-                          ),
-                          _buildBigIconButton(
-                            'Delivering',
-                            Icons.local_shipping,
-                            '/profile/restaurant/delivering',
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 16.0,
-                          right: 16.0,
-                          top: 16.0,
-                          bottom: 4.0,
-                        ),
-                        child: Text(
-                          'Restaurant Settings',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                      ListView(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        children: [
-                          ListTile(
-                            title: const Text('Manage Menus'),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 14,
+                      if (profileState.user.restaurant != null)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 8.0),
+                            Row(
+                              children: [
+                                _buildBigIconButton(
+                                  'Incoming Orders',
+                                  Icons.assignment,
+                                  '/profile/restaurant/${profileState.user.restaurant!.id}/incoming-orders',
+                                ),
+                                _buildBigIconButton(
+                                  'Delivering',
+                                  Icons.local_shipping,
+                                  '/profile/restaurant/${profileState.user.restaurant!.id}/delivering',
+                                ),
+                              ],
                             ),
-                            onTap: () {
-                              context.push('/profile/restaurant/manage-menus');
-                            },
-                          ),
-                        ],
-                      ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 16.0,
+                                right: 16.0,
+                                top: 16.0,
+                                bottom: 4.0,
+                              ),
+                              child: Text(
+                                'Restaurant Settings',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                            ListView(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              children: [
+                                ListTile(
+                                  title: const Text('Manage Menus'),
+                                  trailing: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 14,
+                                  ),
+                                  onTap: () {
+                                    context.push(
+                                      '/profile/restaurant/${profileState.user.restaurant!.id}/manage-menus',
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 );

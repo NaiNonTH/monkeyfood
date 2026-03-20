@@ -13,11 +13,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       final user = await _profileRepositories.getUserProfile();
 
-      if (user == null) {
-        emit(ProfileError(message: 'User is not logged in.'));
-      } else {
-        emit(ProfileLoaded(user: user));
-      }
+      emit(ProfileLoaded(user: user));
     } catch (e) {
       emit(ProfileError(message: e.toString()));
     }

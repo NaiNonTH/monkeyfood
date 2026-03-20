@@ -87,7 +87,68 @@ class FoodRepositories {
     );
   }
 
-  Future<void> addFood(FoodUpload food) async {
+  Future<List<FoodWithAvgRating>> getMenus(int restaurantId) async {
+    final res = await supabase
+        .from('foods_with_avg_rating')
+        .select()
+        .eq('restaurant_id', restaurantId)
+        .order('id', ascending: true);
+
+    return res
+        .map(
+          (value) => FoodWithAvgRating(
+            id: value['id'],
+            title: value['title'],
+            description: value['description'],
+            price: value['price'].toDouble(),
+            originalPrice: value['original_price'].toDouble(),
+            imageName: value['image_name'],
+            rating: value['avg_rating'].toDouble(),
+            latestReview: (value['latest_rating'] == null)
+                ? null
+                : Review(
+                    displayName: value['latest_reviewer'],
+                    rating: value['latest_rating'],
+                    comment: value['latest_comment'],
+                  ),
+          ),
+        )
+        .toList();
+  }
+
+  Future<List<FoodWithAvgRating>> searchMenus(
+    int restaurantId,
+    String query,
+  ) async {
+    final res = await supabase
+        .from('foods_with_avg_rating')
+        .select()
+        .eq('restaurant_id', restaurantId)
+        .ilike('title', '%$query%');
+
+    return res
+        .map(
+          (value) => FoodWithAvgRating(
+            id: value['id'],
+            title: value['title'],
+            description: value['description'],
+            price: value['price'].toDouble(),
+            originalPrice: value['original_price'].toDouble(),
+            imageName: value['image_name'],
+            rating: value['avg_rating'].toDouble(),
+            latestReview: (value['latest_rating'] == null)
+                ? null
+                : Review(
+                    displayName: value['latest_reviewer'],
+                    rating: value['latest_rating'],
+                    comment: value['latest_comment'],
+                  ),
+          ),
+        )
+        .toList();
+  }
+
+  Future<void> addFood(int restaurantId, FoodUpload food) async {
     final fullPath = await FoodImageService.instance.uploadBinary(
       'uploads/${food.upload.name}',
       food.upload.bytes!,
@@ -101,6 +162,7 @@ class FoodRepositories {
       'price': food.price,
       'original_price': food.originalPrice,
       'image_name': imageName,
+      'restaurant_id': restaurantId,
     });
   }
 

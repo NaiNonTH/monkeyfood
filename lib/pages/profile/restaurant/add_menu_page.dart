@@ -10,7 +10,9 @@ import 'package:monkeyfood/models/img_upload.dart';
 import 'package:monkeyfood/states/manage_menus_state.dart';
 
 class AddMenuPage extends StatefulWidget {
-  const AddMenuPage({super.key});
+  final int restaurantId;
+
+  const AddMenuPage({super.key, required this.restaurantId});
 
   @override
   State<AddMenuPage> createState() => _AddMenuPageState();
@@ -43,7 +45,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
       body: BlocConsumer<ManageMenusCubit, ManageMenusState>(
         listener: (context, addFoodstate) {
           if (addFoodstate is MenusModified) {
-            context.go('/profile/restaurant/manage-menus');
+            context.go(
+              '/profile/restaurant/${widget.restaurantId}/manage-menus',
+            );
 
             ScaffoldMessenger.of(
               context,
@@ -213,6 +217,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                               }
 
                               context.read<ManageMenusCubit>().addFood(
+                                widget.restaurantId,
                                 FoodUpload(
                                   title: _titleController.text,
                                   description: _descriptionController.text,

@@ -39,7 +39,7 @@ class IncomingOrderItem {
   final Food food;
   final double unitPrice;
   final OrderStatus status;
-  final Profile profile;
+  final BaseProfile profile;
 
   IncomingOrderItem({
     required this.id,

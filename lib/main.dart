@@ -122,20 +122,32 @@ final _router = GoRouter(
                   builder: (_, _) => EditAccountInfoPage(),
                 ),
                 GoRoute(
-                  path: 'restaurant',
+                  path: 'restaurant/:rid',
                   redirect: (context, state) {
                     return;
                   },
                   routes: [
                     GoRoute(
                       path: 'manage-menus',
-                      builder: (_, _) => ManageMenusPage(),
+                      builder: (context, state) => ManageMenusPage(
+                        restaurantId: int.parse(state.pathParameters['rid']!),
+                      ),
                       routes: [
-                        GoRoute(path: 'add', builder: (_, _) => AddMenuPage()),
+                        GoRoute(
+                          path: 'add',
+                          builder: (context, state) => AddMenuPage(
+                            restaurantId: int.parse(
+                              state.pathParameters['rid']!,
+                            ),
+                          ),
+                        ),
                         GoRoute(
                           path: 'edit/:id',
                           builder: (context, state) => EditMenuPage(
                             id: int.parse(state.pathParameters['id']!),
+                            restaurantId: int.parse(
+                              state.pathParameters['rid']!,
+                            ),
                           ),
                         ),
                       ],
