@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkeyfood/config.dart';
+import 'package:monkeyfood/cubit/change_order_status_cubit.dart';
 import 'package:monkeyfood/cubit/manage_menus_cubit.dart';
 import 'package:monkeyfood/cubit/rate_cubit.dart';
 import 'package:monkeyfood/cubit/add_cart_item_cubit.dart';
@@ -19,7 +20,9 @@ import 'package:monkeyfood/cubit/view_reviews_cubit.dart';
 import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/add_menu_page.dart';
+import 'package:monkeyfood/pages/profile/restaurant/delivering_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/edit_menu_page.dart';
+import 'package:monkeyfood/pages/profile/restaurant/incoming_orders_page.dart';
 import 'package:monkeyfood/pages/reviews_page.dart';
 import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
 import 'package:monkeyfood/pages/profile/favorite_page.dart';
@@ -137,6 +140,14 @@ final _router = GoRouter(
                         ),
                       ],
                     ),
+                    GoRoute(
+                      path: 'incoming-orders',
+                      builder: (_, _) => IncomingOrdersPage(),
+                    ),
+                    GoRoute(
+                      path: 'delivering',
+                      builder: (_, _) => DeliveringPage(),
+                    ),
                   ],
                 ),
               ],
@@ -191,6 +202,9 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => RatingCubit(RatingRepositories())),
         BlocProvider(create: (context) => AddRatingCubit(RatingRepositories())),
         BlocProvider(create: (context) => ReviewCubit(RatingRepositories())),
+        BlocProvider(
+          create: (context) => ChangeOrderStatusCubit(OrderRepositories()),
+        ),
         BlocProvider(
           create: (context) => FavoriteCubit(FavoriteRepositories()),
         ),

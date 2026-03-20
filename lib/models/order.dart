@@ -1,4 +1,5 @@
 import 'package:monkeyfood/models/food.dart';
+import 'package:monkeyfood/models/profile.dart';
 
 enum OrderStatus { preparing, delivering, delivered }
 
@@ -29,5 +30,23 @@ class OrderItem {
     required this.food,
     required this.unitPrice,
     required this.status,
+  });
+}
+
+class IncomingOrderItem {
+  final int id;
+  final int amount;
+  final Food food;
+  final double unitPrice;
+  final OrderStatus status;
+  final Profile profile;
+
+  IncomingOrderItem({
+    required this.id,
+    required this.amount,
+    required this.food,
+    required this.unitPrice,
+    required this.status,
+    required this.profile,
   });
 }

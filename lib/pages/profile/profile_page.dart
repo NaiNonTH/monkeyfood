@@ -79,68 +79,20 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(height: 8),
                       Row(
                         children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () {
-                                context.push('/profile/track-my-order');
-                              },
-                              style: TextButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusGeometry.all(
-                                    Radius.zero,
-                                  ),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Icon(Icons.local_shipping_outlined, size: 32),
-                                  SizedBox(height: 4),
-                                  Text('Track My Order'),
-                                ],
-                              ),
-                            ),
+                          _buildBigIconButton(
+                            'Track My Order',
+                            Icons.local_shipping_outlined,
+                            '/profile/track-my-order',
                           ),
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () {
-                                context.push('/profile/to-rate');
-                              },
-                              style: TextButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusGeometry.all(
-                                    Radius.zero,
-                                  ),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Icon(Icons.star_border, size: 32),
-                                  SizedBox(height: 4),
-                                  Text('To Rate'),
-                                ],
-                              ),
-                            ),
+                          _buildBigIconButton(
+                            'To Rate',
+                            Icons.star_outline,
+                            '/profile/to-rate',
                           ),
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () {
-                                context.push('/profile/favorite');
-                              },
-                              style: TextButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusGeometry.all(
-                                    Radius.zero,
-                                  ),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Icon(Icons.favorite_outline, size: 32),
-                                  SizedBox(height: 4),
-                                  Text('Favorite'),
-                                ],
-                              ),
-                            ),
+                          _buildBigIconButton(
+                            'Favorites',
+                            Icons.favorite_outline,
+                            '/profile/favorite',
                           ),
                         ],
                       ),
@@ -221,30 +173,32 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                       ),
+                      SizedBox(height: 8.0),
                       Row(
                         children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () {
-                                // context.push('/profile/track-my-order');
-                              },
-                              style: TextButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusGeometry.all(
-                                    Radius.zero,
-                                  ),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Icon(Icons.assignment, size: 32),
-                                  SizedBox(height: 4),
-                                  Text('Incoming Orders'),
-                                ],
-                              ),
-                            ),
+                          _buildBigIconButton(
+                            'Incoming Orders',
+                            Icons.assignment,
+                            '/profile/restaurant/incoming-orders',
+                          ),
+                          _buildBigIconButton(
+                            'Delivering',
+                            Icons.local_shipping,
+                            '/profile/restaurant/delivering',
                           ),
                         ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16.0,
+                          right: 16.0,
+                          top: 16.0,
+                          bottom: 4.0,
+                        ),
+                        child: Text(
+                          'Restaurant Settings',
+                          style: TextStyle(color: Colors.grey),
+                        ),
                       ),
                       ListView(
                         physics: NeverScrollableScrollPhysics(),
@@ -271,6 +225,28 @@ class _ProfilePageState extends State<ProfilePage> {
                 return Center(child: CircularProgressIndicator());
             }
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBigIconButton(String label, IconData iconData, String location) {
+    return Expanded(
+      child: TextButton(
+        onPressed: () {
+          context.push(location);
+        },
+        style: TextButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.all(Radius.zero),
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(iconData, size: 32),
+            SizedBox(height: 4),
+            Text(label),
+          ],
         ),
       ),
     );

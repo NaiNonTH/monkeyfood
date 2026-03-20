@@ -19,4 +19,28 @@ class OrderCubit extends Cubit<OrderState> {
       emit(OrderError(message: e.toString()));
     }
   }
+
+  Future<void> getIncomingOrders() async {
+    emit(LoadingOrder());
+
+    try {
+      final res = await _orderRepositories.getIncomingOrders();
+
+      emit(IncomingOrderLoaded(orders: res));
+    } catch (e) {
+      emit(OrderError(message: e.toString()));
+    }
+  }
+
+  Future<void> getDeliveringOrders() async {
+    emit(LoadingOrder());
+
+    try {
+      final res = await _orderRepositories.getDeliveringOrders();
+
+      emit(IncomingOrderLoaded(orders: res));
+    } catch (e) {
+      emit(OrderError(message: e.toString()));
+    }
+  }
 }

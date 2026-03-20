@@ -12,6 +12,12 @@ class OrderLoaded extends OrderState {
   OrderLoaded({required this.orders});
 }
 
+class IncomingOrderLoaded extends OrderState {
+  final List<IncomingOrderItem> orders;
+
+  IncomingOrderLoaded({required this.orders});
+}
+
 class OrderError extends OrderState {
   final String message;
 

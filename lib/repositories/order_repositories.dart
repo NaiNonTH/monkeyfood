@@ -1,6 +1,7 @@
 import 'package:monkeyfood/models/cart_item.dart';
 import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/models/order.dart';
+import 'package:monkeyfood/models/profile.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
 
 class OrderRepositories {
@@ -76,5 +77,75 @@ class OrderRepositories {
         .from('cart_items')
         .delete()
         .eq('user_id', supabase.auth.currentUser!.id);
+  }
+
+  Future<List<IncomingOrderItem>> getIncomingOrders() async {
+    final res = await supabase.from('incoming_order_items').select();
+
+    return res
+        .map(
+          (orderItem) => IncomingOrderItem(
+            id: orderItem['id'],
+            amount: orderItem['amount'],
+            food: Food(
+              id: orderItem['food_id'],
+              title: orderItem['food_title'],
+              description: orderItem['food_description'],
+              price: orderItem['food_price'],
+              originalPrice: orderItem['food_original_price'],
+              imageName: orderItem['food_image_name'],
+            ),
+            unitPrice: orderItem['unit_price'],
+            status: OrderStatus.values.byName(orderItem['status']),
+            profile: Profile(
+              displayName: orderItem['orderer_name'],
+              tel: orderItem['orderer_tel'],
+              location: orderItem['orderer_location'],
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  Future<List<IncomingOrderItem>> getDeliveringOrders() async {
+    final res = await supabase.from('delivering_items').select();
+
+    return res
+        .map(
+          (orderItem) => IncomingOrderItem(
+            id: orderItem['id'],
+            amount: orderItem['amount'],
+            food: Food(
+              id: orderItem['food_id'],
+              title: orderItem['food_title'],
+              description: orderItem['food_description'],
+              price: orderItem['food_price'],
+              originalPrice: orderItem['food_original_price'],
+              imageName: orderItem['food_image_name'],
+            ),
+            unitPrice: orderItem['unit_price'],
+            status: OrderStatus.values.byName(orderItem['status']),
+            profile: Profile(
+              displayName: orderItem['orderer_name'],
+              tel: orderItem['orderer_tel'],
+              location: orderItem['orderer_location'],
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  Future<void> toDelivery(int orderItemId) async {
+    await supabase
+        .from('order_items')
+        .update({'status': 'delivering'})
+        .eq('id', orderItemId);
+  }
+
+  Future<void> finishDelivery(int orderItemId) async {
+    await supabase
+        .from('order_items')
+        .update({'status': 'delivered'})
+        .eq('id', orderItemId);
   }
 }
