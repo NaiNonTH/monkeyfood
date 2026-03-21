@@ -7,7 +7,7 @@ class SearchInit extends SearchState {}
 class Searching extends SearchState {}
 
 class Searched extends SearchState {
-  final List<FoodWithAvgRating> results;
+  final List<FoodDisplay> results;
 
   Searched({required this.results});
 }

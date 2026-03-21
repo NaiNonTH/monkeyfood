@@ -7,7 +7,7 @@ class FoodsInit extends FoodsState {}
 class FoodsLoading extends FoodsState {}
 
 class FoodsLoaded extends FoodsState {
-  final List<FoodWithAvgRating> foods;
+  final List<FoodDisplay> foods;
 
   FoodsLoaded({required this.foods});
 }

@@ -4,9 +4,7 @@ import 'package:monkeyfood/services/supabase_service.dart';
 import 'package:random_string/random_string.dart';
 
 class ProfileRepositories {
-  late Restaurant? _restaurant;
-
-  Future<Profile> getUserProfile() async {
+  Future<ProfileWithRestaurant> getUserProfile() async {
     final res = await supabase
         .from('profiles')
         .select('*, restaurants(*)')
@@ -15,8 +13,8 @@ class ProfileRepositories {
 
     final rrJson = res['restaurants'];
 
-    _restaurant = rrJson != null
-        ? Restaurant(
+    final restaurant = rrJson != null
+        ? RestaurantWithCode(
             id: rrJson['id'],
             name: rrJson['name'],
             location: rrJson['location'],
@@ -24,20 +22,12 @@ class ProfileRepositories {
           )
         : null;
 
-    return Profile(
+    return ProfileWithRestaurant(
       displayName: res['display_name'],
       tel: res['tel'],
       location: res['location'],
-      restaurant: _restaurant,
+      restaurant: restaurant,
     );
-  }
-
-  Restaurant? getUsersRestaurant() {
-    try {
-      return _restaurant;
-    } catch (e) {
-      return null;
-    }
   }
 
   Future<void> updateUserProfile(Profile profile) async {

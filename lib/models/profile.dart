@@ -1,21 +1,21 @@
 import 'package:monkeyfood/models/restaurant.dart';
 
-class BaseProfile {
+class Profile {
   final String displayName;
   final String tel;
   final String location;
 
-  BaseProfile({
+  Profile({
     required this.displayName,
     required this.tel,
     required this.location,
   });
 }
 
-class Profile extends BaseProfile {
-  final Restaurant? restaurant;
+class ProfileWithRestaurant extends Profile {
+  final RestaurantWithCode? restaurant;
 
-  Profile({
+  ProfileWithRestaurant({
     required super.displayName,
     required super.tel,
     required super.location,

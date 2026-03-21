@@ -7,7 +7,7 @@ class ManageMenusInit extends ManageMenusState {}
 class LoadingMenus extends ManageMenusState {}
 
 class MenusLoaded extends ManageMenusState {
-  final List<FoodWithAvgRating> foods;
+  final List<Food> foods;
 
   MenusLoaded({required this.foods});
 }

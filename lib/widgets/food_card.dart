@@ -4,7 +4,7 @@ import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/widgets/favorite.dart';
 
 class FoodCard extends StatelessWidget {
-  final FoodWithAvgRating food;
+  final FoodDisplay food;
 
   const FoodCard({super.key, required this.food});
 

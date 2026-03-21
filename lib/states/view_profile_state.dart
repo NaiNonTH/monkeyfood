@@ -7,7 +7,7 @@ class ProfileInit extends ProfileState {}
 class ProfileLoading extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {
-  final Profile user;
+  final ProfileWithRestaurant user;
 
   ProfileLoaded({required this.user});
 }

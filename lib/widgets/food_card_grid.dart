@@ -6,7 +6,7 @@ import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/widgets/food_card.dart';
 
 class FoodCardGrid extends StatefulWidget {
-  final List<FoodWithAvgRating> foods;
+  final List<FoodDisplay> foods;
   final bool fromSearch;
 
   const FoodCardGrid({super.key, required this.foods, this.fromSearch = false});

@@ -180,7 +180,7 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
                                   Icon(Icons.account_circle, size: 32.0),
                                   SizedBox(width: 8.0),
                                   Text(
-                                    "Restaurant Name",
+                                    foodState.food.restaurant.name,
                                     style: TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold,

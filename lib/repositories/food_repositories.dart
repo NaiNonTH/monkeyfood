@@ -1,20 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:monkeyfood/models/food.dart';
 import 'package:monkeyfood/models/food_upload.dart';
+import 'package:monkeyfood/models/restaurant.dart';
 import 'package:monkeyfood/models/review.dart';
 import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
 
 class FoodRepositories {
-  Future<List<FoodWithAvgRating>> getFoodEntries() async {
+  Future<List<FoodDisplay>> getFoodEntries() async {
     final res = await supabase
-        .from('foods_with_avg_rating')
+        .from('foods_display')
         .select()
         .order('id', ascending: true);
 
     return res
         .map(
-          (value) => FoodWithAvgRating(
+          (value) => FoodDisplay(
             id: value['id'],
             title: value['title'],
             description: value['description'],
@@ -29,20 +30,25 @@ class FoodRepositories {
                     rating: value['latest_rating'],
                     comment: value['latest_comment'],
                   ),
+            restaurant: Restaurant(
+              id: value['restaurant_id'],
+              name: value['restaurant_name'],
+              location: value['restaurant_location'],
+            ),
           ),
         )
         .toList();
   }
 
-  Future<List<FoodWithAvgRating>> searchFoodEntries(String query) async {
+  Future<List<FoodDisplay>> searchFoodEntries(String query) async {
     final res = await supabase
-        .from('foods_with_avg_rating')
+        .from('foods_display')
         .select()
         .ilike('title', '%$query%');
 
     return res
         .map(
-          (value) => FoodWithAvgRating(
+          (value) => FoodDisplay(
             id: value['id'],
             title: value['title'],
             description: value['description'],
@@ -57,19 +63,24 @@ class FoodRepositories {
                     rating: value['latest_rating'],
                     comment: value['latest_comment'],
                   ),
+            restaurant: Restaurant(
+              id: value['restaurant_id'],
+              name: value['restaurant_name'],
+              location: value['restaurant_location'],
+            ),
           ),
         )
         .toList();
   }
 
-  Future<FoodWithAvgRating> getFoodById(int id) async {
+  Future<FoodDisplay> getFoodById(int id) async {
     final res = await supabase
-        .from('foods_with_avg_rating')
+        .from('foods_display')
         .select()
         .eq('id', id)
         .single();
 
-    return FoodWithAvgRating(
+    return FoodDisplay(
       id: res['id'],
       title: res['title'],
       description: res['description'],
@@ -84,10 +95,15 @@ class FoodRepositories {
               rating: res['latest_rating'],
               comment: res['latest_comment'],
             ),
+      restaurant: Restaurant(
+        id: res['restaurant_id'],
+        name: res['restaurant_name'],
+        location: res['restaurant_location'],
+      ),
     );
   }
 
-  Future<List<FoodWithAvgRating>> getMenus(int restaurantId) async {
+  Future<List<Food>> getMenus(int restaurantId) async {
     final res = await supabase
         .from('foods_with_avg_rating')
         .select()
@@ -96,30 +112,19 @@ class FoodRepositories {
 
     return res
         .map(
-          (value) => FoodWithAvgRating(
+          (value) => Food(
             id: value['id'],
             title: value['title'],
             description: value['description'],
             price: value['price'].toDouble(),
             originalPrice: value['original_price'].toDouble(),
             imageName: value['image_name'],
-            rating: value['avg_rating'].toDouble(),
-            latestReview: (value['latest_rating'] == null)
-                ? null
-                : Review(
-                    displayName: value['latest_reviewer'],
-                    rating: value['latest_rating'],
-                    comment: value['latest_comment'],
-                  ),
           ),
         )
         .toList();
   }
 
-  Future<List<FoodWithAvgRating>> searchMenus(
-    int restaurantId,
-    String query,
-  ) async {
+  Future<List<Food>> searchMenus(int restaurantId, String query) async {
     final res = await supabase
         .from('foods_with_avg_rating')
         .select()
@@ -128,21 +133,13 @@ class FoodRepositories {
 
     return res
         .map(
-          (value) => FoodWithAvgRating(
+          (value) => Food(
             id: value['id'],
             title: value['title'],
             description: value['description'],
             price: value['price'].toDouble(),
             originalPrice: value['original_price'].toDouble(),
             imageName: value['image_name'],
-            rating: value['avg_rating'].toDouble(),
-            latestReview: (value['latest_rating'] == null)
-                ? null
-                : Review(
-                    displayName: value['latest_reviewer'],
-                    rating: value['latest_rating'],
-                    comment: value['latest_comment'],
-                  ),
           ),
         )
         .toList();
