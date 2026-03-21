@@ -1,6 +1,7 @@
 import 'package:monkeyfood/models/profile.dart';
 import 'package:monkeyfood/models/restaurant.dart';
 import 'package:monkeyfood/services/supabase_service.dart';
+import 'package:random_string/random_string.dart';
 
 class ProfileRepositories {
   late Restaurant? _restaurant;
@@ -19,6 +20,7 @@ class ProfileRepositories {
             id: rrJson['id'],
             name: rrJson['name'],
             location: rrJson['location'],
+            joinCode: rrJson['join_code'],
           )
         : null;
 
@@ -46,6 +48,25 @@ class ProfileRepositories {
           'tel': profile.tel,
           'location': profile.location,
         })
+        .eq('id', supabase.auth.currentUser!.id);
+  }
+
+  Future<void> createRestaurant({
+    required String name,
+    required String location,
+  }) async {
+    final res = await supabase
+        .from('restaurants')
+        .insert({
+          'name': name,
+          'location': location,
+          'join_code': randomAlphaNumeric(8),
+        })
+        .select('id');
+
+    await supabase
+        .from('profiles')
+        .update({'restaurant_id': res[0]['id']})
         .eq('id', supabase.auth.currentUser!.id);
   }
 

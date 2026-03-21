@@ -15,6 +15,7 @@ dependencies:
   go_router: ^17.1.0
   humanize: ^1.2.1
   intl: ^0.20.2
+  random_string: ^2.3.1
   shared_preferences: ^2.5.4
   supabase_flutter: ^2.12.0
 

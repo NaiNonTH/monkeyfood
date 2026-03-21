@@ -20,6 +20,7 @@ import 'package:monkeyfood/cubit/view_foods_to_rate_cubit.dart';
 import 'package:monkeyfood/cubit/view_reviews_cubit.dart';
 import 'package:monkeyfood/cubit/update_profile_cubit.dart';
 import 'package:monkeyfood/pages/cart/cart_page.dart';
+import 'package:monkeyfood/pages/profile/create_restaurant_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/add_menu_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/delivering_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/edit_menu_page.dart';
@@ -121,6 +122,10 @@ final _router = GoRouter(
                 GoRoute(
                   path: 'edit-account-info',
                   builder: (_, _) => EditAccountInfoPage(),
+                ),
+                GoRoute(
+                  path: 'create-restaurant',
+                  builder: (_, _) => CreateRestaurantPage(),
                 ),
                 GoRoute(
                   path: 'restaurant/:rid',
