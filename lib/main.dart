@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkeyfood/config.dart';
 import 'package:monkeyfood/cubit/change_order_status_cubit.dart';
+import 'package:monkeyfood/cubit/view_restaurant_info_cubit.dart';
 import 'package:monkeyfood/cubit/join_restaurant_cubit.dart';
 import 'package:monkeyfood/cubit/manage_menus_cubit.dart';
 import 'package:monkeyfood/cubit/rate_cubit.dart';
@@ -24,6 +25,7 @@ import 'package:monkeyfood/pages/profile/create_restaurant_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/add_menu_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/delivering_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/edit_menu_page.dart';
+import 'package:monkeyfood/pages/profile/restaurant/edit_restaurant_info_page.dart';
 import 'package:monkeyfood/pages/profile/restaurant/incoming_orders_page.dart';
 import 'package:monkeyfood/pages/reviews_page.dart';
 import 'package:monkeyfood/pages/profile/edit_account_info_page.dart';
@@ -159,6 +161,12 @@ final _router = GoRouter(
                       ],
                     ),
                     GoRoute(
+                      path: 'edit-info',
+                      builder: (context, state) => EditRestaurantInfoPage(
+                        restaurantId: int.parse(state.pathParameters['rid']!),
+                      ),
+                    ),
+                    GoRoute(
                       path: 'incoming-orders',
                       builder: (_, _) => IncomingOrdersPage(),
                     ),
@@ -211,6 +219,9 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => JoinRestaurantCubit(ProfileRepositories()),
+        ),
+        BlocProvider(
+          create: (context) => RestaurantInfoCubit(ProfileRepositories()),
         ),
         BlocProvider(create: (context) => SearchCubit(FoodRepositories())),
         BlocProvider(create: (context) => FoodCubit(FoodRepositories())),

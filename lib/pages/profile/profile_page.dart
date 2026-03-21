@@ -70,7 +70,6 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context, profileState) {
             switch (profileState) {
               case ProfileLoaded():
-                debugPrint(profileState.user.restaurant.toString());
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,6 +245,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   onTap: () async {
                                     await _showRestaurantCode(profileState);
+                                  },
+                                ),
+                                Divider(height: 1),
+                                ListTile(
+                                  title: const Text('Edit Restaurant Info'),
+                                  trailing: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 14,
+                                  ),
+                                  onTap: () async {
+                                    context.push(
+                                      '/profile/restaurant/${profileState.user.restaurant!.id}/edit-info',
+                                    );
                                   },
                                 ),
                                 Divider(height: 1),

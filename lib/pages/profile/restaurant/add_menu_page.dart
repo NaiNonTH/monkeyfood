@@ -279,8 +279,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
           size: result.files.single.size,
         );
       });
-    } else {
-      debugPrint('File cancelled');
     }
   }
 }

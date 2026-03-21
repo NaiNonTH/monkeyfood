@@ -30,6 +30,20 @@ class ProfileRepositories {
     );
   }
 
+  Future<Restaurant> getRestaurantInfo(int restaurantId) async {
+    final res = await supabase
+        .from('restaurants')
+        .select()
+        .eq('id', restaurantId)
+        .single();
+
+    return Restaurant(
+      id: res['id'],
+      name: res['name'],
+      location: res['location'],
+    );
+  }
+
   Future<void> updateUserProfile(Profile profile) async {
     await supabase
         .from('profiles')
@@ -58,6 +72,17 @@ class ProfileRepositories {
         .from('profiles')
         .update({'restaurant_id': res[0]['id']})
         .eq('id', supabase.auth.currentUser!.id);
+  }
+
+  Future<void> updateRestaurant(
+    int restaurantId, {
+    required String name,
+    required String location,
+  }) async {
+    await supabase
+        .from('restaurants')
+        .update({'name': name, 'location': location})
+        .eq('id', restaurantId);
   }
 
   Future<void> joinRestaurant(String joinCode) async {

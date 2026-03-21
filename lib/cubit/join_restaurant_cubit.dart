@@ -25,6 +25,26 @@ class JoinRestaurantCubit extends Cubit<JoinRestaurantState> {
     }
   }
 
+  Future<void> updateRestaurant(
+    int restaurantId, {
+    required String name,
+    required String location,
+  }) async {
+    emit(JoiningRestaurant());
+
+    try {
+      await _profileRepositories.updateRestaurant(
+        restaurantId,
+        name: name,
+        location: location,
+      );
+
+      emit(RestaurantJoined());
+    } catch (e) {
+      emit(JoinRestaurantError(message: e.toString()));
+    }
+  }
+
   Future<void> joinRestaurant(String joinCode) async {
     emit(JoiningRestaurant());
 
