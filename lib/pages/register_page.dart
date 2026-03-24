@@ -16,6 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _displayNameController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _locationController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -24,6 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _locationController.dispose();
     _phoneController.dispose();
     _displayNameController.dispose();
     super.dispose();
@@ -117,6 +119,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       SizedBox(height: 16),
                       _buildTextField(
+                        controller: _locationController,
+                        label: 'Location',
+                        validator: (value) {
+                          if (value == null || value == '') {
+                            return 'Location must not be blank';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      _buildTextField(
                         controller: _passwordController,
                         obscureText: true,
                         label: 'Password',
@@ -156,6 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 password: _passwordController.text,
                                 data: {
                                   'display_name': _displayNameController.text,
+                                  'location': _locationController.text,
                                   'tel': _phoneController.text,
                                 },
                               );
