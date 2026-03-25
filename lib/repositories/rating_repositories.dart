@@ -30,7 +30,7 @@ class RatingRepositories {
 
     final query = supabase
         .from('order_items')
-        .select('foods(*), orders(user_id)')
+        .select('foods(*), orders!inner(user_id)')
         .eq('status', 'delivered')
         .eq('orders.user_id', supabase.auth.currentUser!.id);
 
