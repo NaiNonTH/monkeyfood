@@ -66,70 +66,85 @@ class _DeliveringPageState extends State<DeliveringPage> {
     ChangeOrderStatusState changeOrderStatusState,
   ) {
     return LineBox(
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            width: 100,
-            height: 100,
-            child: Image.network(
-              FoodImageService.instance.url(order.food.imageName) ?? '',
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
-                  Center(child: Icon(Icons.error_outline)),
-            ),
-          ),
-          SizedBox(width: 8),
-          Column(
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                order.food.title,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                width: 100,
+                height: 100,
+                child: Image.network(
+                  FoodImageService.instance.url(order.food.imageName) ?? '',
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      Center(child: Icon(Icons.error_outline)),
+                ),
               ),
-              SizedBox(height: 4),
-              Row(
+              SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.account_circle),
-                  SizedBox(width: 4),
-                  Text(order.profile.displayName),
-                ],
-              ),
-              SizedBox(height: 12),
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: (changeOrderStatusState is ChangingOrderStatus)
-                        ? () {}
-                        : () {
-                            context
-                                .read<ChangeOrderStatusCubit>()
-                                .finishDelivery(order.id);
-                          },
-                    child:
-                        (changeOrderStatusState is ChangingOrderStatus &&
-                            changeOrderStatusState.orderItemId == order.id)
-                        ? SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Row(
-                            children: [
-                              const Icon(Icons.check),
-                              SizedBox(width: 4),
-                              const Text('Finish Delivery'),
-                            ],
-                          ),
+                  Text(
+                    order.food.title,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(Icons.account_circle),
+                      SizedBox(width: 4),
+                      Text(order.profile.displayName),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed:
+                            (changeOrderStatusState is ChangingOrderStatus)
+                            ? () {}
+                            : () {
+                                context
+                                    .read<ChangeOrderStatusCubit>()
+                                    .finishDelivery(order.id);
+                              },
+                        child:
+                            (changeOrderStatusState is ChangingOrderStatus &&
+                                changeOrderStatusState.orderItemId == order.id)
+                            ? SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Row(
+                                children: [
+                                  const Icon(Icons.check),
+                                  SizedBox(width: 4),
+                                  const Text('Finish Delivery'),
+                                ],
+                              ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ],
           ),
+          SizedBox(height: 12.0),
+          Text(
+            'Location',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+          ),
+          SizedBox(height: 8.0),
+          Text(order.profile.location),
         ],
       ),
     );
