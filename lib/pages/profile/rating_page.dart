@@ -101,7 +101,7 @@ class _RatingPageState extends State<RatingPage> {
                             height: 16,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : Text('Place Order'),
+                        : Text('Review'),
                   ),
                 ),
               ],
