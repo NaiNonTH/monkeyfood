@@ -97,16 +97,11 @@ class _TrackMyOrderPageState extends State<TrackMyOrderPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              (order.items[index].food != null)
-                                                  ? order
-                                                        .items[index]
-                                                        .food!
-                                                        .title
-                                                  : 'Deleted Food',
+                                              "(x${order.items[index].amount}) ${(order.items[index].food != null) ? order.items[index].food!.title : 'Deleted Food'}",
                                             ),
                                             SizedBox(height: 4),
                                             Text(
-                                              '\$${order.items[index].unitPrice.toStringAsFixed(2)}',
+                                              '\$${(order.items[index].unitPrice * order.items[index].amount).toStringAsFixed(2)}',
                                               style: TextStyle(
                                                 fontSize: 22,
                                                 fontWeight: FontWeight.bold,
