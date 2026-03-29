@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Carousel(),
+              // Carousel(),
               Padding(
                 padding: const EdgeInsets.only(
                   left: 4.0,
