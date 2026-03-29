@@ -94,7 +94,7 @@ class _DeliveringPageState extends State<DeliveringPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    (order.food != null) ? order.food!.title : 'Deleted',
+                    "(x${order.amount}) ${(order.food != null) ? order.food!.title : 'Deleted Food'}",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   SizedBox(height: 4),
