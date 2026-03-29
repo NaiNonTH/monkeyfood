@@ -80,7 +80,10 @@ class _DeliveringPageState extends State<DeliveringPage> {
                 width: 100,
                 height: 100,
                 child: Image.network(
-                  FoodImageService.instance.url(order.food.imageName) ?? '',
+                  FoodImageService.instance.url(
+                        (order.food != null) ? order.food!.imageName : null,
+                      ) ??
+                      '',
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) =>
                       Center(child: Icon(Icons.error_outline)),
@@ -91,7 +94,7 @@ class _DeliveringPageState extends State<DeliveringPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    order.food.title,
+                    (order.food != null) ? order.food!.title : 'Deleted',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   SizedBox(height: 4),

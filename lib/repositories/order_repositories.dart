@@ -21,14 +21,17 @@ class OrderRepositories {
             (orderItem) => OrderItem(
               id: orderItem['id'],
               amount: orderItem['amount'],
-              food: Food(
-                id: orderItem['foods']['id'],
-                title: orderItem['foods']['title'],
-                description: orderItem['foods']['description'],
-                price: orderItem['foods']['price'].toDouble(),
-                originalPrice: orderItem['foods']['original_price'].toDouble(),
-                imageName: orderItem['foods']['image_name'],
-              ),
+              food: (orderItem['foods'] != null)
+                  ? Food(
+                      id: orderItem['foods']['id'],
+                      title: orderItem['foods']['title'],
+                      description: orderItem['foods']['description'],
+                      price: orderItem['foods']['price'].toDouble(),
+                      originalPrice: orderItem['foods']['original_price']
+                          .toDouble(),
+                      imageName: orderItem['foods']['image_name'],
+                    )
+                  : null,
               unitPrice: orderItem['unit_price'],
               status: OrderStatus.values.byName(orderItem['status']),
             ),
@@ -87,14 +90,16 @@ class OrderRepositories {
           (orderItem) => IncomingOrderItem(
             id: orderItem['id'],
             amount: orderItem['amount'],
-            food: Food(
-              id: orderItem['food_id'],
-              title: orderItem['food_title'],
-              description: orderItem['food_description'],
-              price: orderItem['food_price'],
-              originalPrice: orderItem['food_original_price'],
-              imageName: orderItem['food_image_name'],
-            ),
+            food: (orderItem['food_id'] != null)
+                ? Food(
+                    id: orderItem['food_id'],
+                    title: orderItem['food_title'],
+                    description: orderItem['food_description'],
+                    price: orderItem['food_price'],
+                    originalPrice: orderItem['food_original_price'],
+                    imageName: orderItem['food_image_name'],
+                  )
+                : null,
             unitPrice: orderItem['unit_price'],
             status: OrderStatus.values.byName(orderItem['status']),
             profile: Profile(
@@ -115,14 +120,16 @@ class OrderRepositories {
           (orderItem) => IncomingOrderItem(
             id: orderItem['id'],
             amount: orderItem['amount'],
-            food: Food(
-              id: orderItem['food_id'],
-              title: orderItem['food_title'],
-              description: orderItem['food_description'],
-              price: orderItem['food_price'],
-              originalPrice: orderItem['food_original_price'],
-              imageName: orderItem['food_image_name'],
-            ),
+            food: (orderItem['food_id'] != null)
+                ? Food(
+                    id: orderItem['food_id'],
+                    title: orderItem['food_title'],
+                    description: orderItem['food_description'],
+                    price: orderItem['food_price'],
+                    originalPrice: orderItem['food_original_price'],
+                    imageName: orderItem['food_image_name'],
+                  )
+                : null,
             unitPrice: orderItem['unit_price'],
             status: OrderStatus.values.byName(orderItem['status']),
             profile: Profile(

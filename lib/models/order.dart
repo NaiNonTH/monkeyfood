@@ -20,7 +20,7 @@ class Order {
 class OrderItem {
   final int id;
   final int amount;
-  final Food food;
+  final Food? food;
   final double unitPrice;
   final OrderStatus status;
 
@@ -36,7 +36,7 @@ class OrderItem {
 class IncomingOrderItem {
   final int id;
   final int amount;
-  final Food food;
+  final Food? food;
   final double unitPrice;
   final OrderStatus status;
   final Profile profile;

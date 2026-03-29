@@ -71,7 +71,12 @@ class _TrackMyOrderPageState extends State<TrackMyOrderPage> {
                                       height: 72,
                                       child: Image.network(
                                         FoodImageService.instance.url(
-                                              order.items[index].food.imageName,
+                                              (order.items[index].food != null)
+                                                  ? order
+                                                        .items[index]
+                                                        .food!
+                                                        .imageName
+                                                  : null,
                                             ) ??
                                             '',
                                         fit: BoxFit.cover,
@@ -91,7 +96,14 @@ class _TrackMyOrderPageState extends State<TrackMyOrderPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(order.items[index].food.title),
+                                            Text(
+                                              (order.items[index].food != null)
+                                                  ? order
+                                                        .items[index]
+                                                        .food!
+                                                        .title
+                                                  : 'Deleted Food',
+                                            ),
                                             SizedBox(height: 4),
                                             Text(
                                               '\$${order.items[index].unitPrice.toStringAsFixed(2)}',
