@@ -107,9 +107,6 @@ final _router = GoRouter(
           routes: [GoRoute(path: '/', builder: (_, _) => HomePage())],
         ),
         StatefulShellBranch(
-          routes: [GoRoute(path: '/cart', builder: (_, _) => CartPage())],
-        ),
-        StatefulShellBranch(
           routes: [
             GoRoute(
               path: '/profile',
@@ -181,6 +178,11 @@ final _router = GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: '/cart',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (_, _) => CartPage(),
     ),
     GoRoute(
       path: '/search',

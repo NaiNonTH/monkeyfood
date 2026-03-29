@@ -7,7 +7,6 @@ import 'package:monkeyfood/services/image_service.dart';
 import 'package:monkeyfood/states/add_cart_items_state.dart';
 import 'package:monkeyfood/states/manage_cart_items_state.dart';
 import 'package:monkeyfood/states/place_order_state.dart';
-import 'package:monkeyfood/widgets/main_app_bar.dart';
 import 'package:monkeyfood/widgets/scroll_provider.dart';
 import 'package:monkeyfood/widgets/show_error.dart';
 
@@ -29,7 +28,7 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GlobalAppBar(),
+      appBar: AppBar(title: const Text('Cart')),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<CartCubit>().refreshCartItems();

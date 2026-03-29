@@ -47,7 +47,17 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Food')),
+      appBar: AppBar(
+        title: const Text('Food'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.push('/cart');
+            },
+            icon: Icon(Icons.shopping_cart),
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<FoodCubit>().loadFoodById(widget.id);

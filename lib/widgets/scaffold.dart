@@ -21,7 +21,6 @@ class _SharedScaffoldState extends State<SharedScaffold> {
             widget.navigationShell.goBranch(index),
         destinations: [
           NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.shopping_cart), label: 'Cart'),
           NavigationDestination(
             icon: Icon(Icons.account_circle),
             label: 'Profile',

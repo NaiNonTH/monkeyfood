@@ -21,6 +21,12 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () {
+            context.push('/cart');
+          },
+          icon: Icon(Icons.shopping_cart),
+        ),
+        IconButton(
+          onPressed: () {
             context.push('/search');
           },
           icon: Icon(Icons.search),
